@@ -1,12 +1,20 @@
 <template>
   <div id="app">
-    <BasicLayouts />
+    <template v-if="route.path.startsWith('/user')">
+      <UserLayout />
+    </template>
+    <template v-else>
+      <GlobalLayout />
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useRoute } from 'vue-router'
+import UserLayout from '@/layouts/userLayout.vue'
+import GlobalLayout from '@/layouts/globalLayout.vue'
 
-import BasicLayouts from '@/layouts/basicLayouts.vue'
+const route = useRoute()
 </script>
 
 <style scoped>

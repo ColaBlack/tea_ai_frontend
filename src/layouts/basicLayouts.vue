@@ -4,7 +4,9 @@
       <a-layout-header class="header">
         <GlobalHeader />
       </a-layout-header>
-      <a-layout-content class="content">Content</a-layout-content>
+      <a-layout-content class="content">
+        <router-view />
+      </a-layout-content>
       <a-layout-footer class="footer">
         <GlobalFooter />
       </a-layout-footer>
@@ -18,5 +20,8 @@ import GlobalFooter from '@/layouts/components/globalFooter.vue'
 </script>
 
 <style scoped>
-
+#basic-layout .content{
+  padding: 24px;
+  background: linear-gradient(to bottom, #f8f8f8, #f5f5f5);
+}
 </style>

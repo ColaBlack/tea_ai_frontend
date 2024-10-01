@@ -1,13 +1,13 @@
 import axios from 'axios'
 
-const myAxios = axios.create({
+const request = axios.create({
   baseURL: 'http://localhost:1221',
   timeout: 10000,
   withCredentials: true
 })
 
 // 请求拦截器
-myAxios.interceptors.request.use(
+request.interceptors.request.use(
   function (config) {
     // Do something before request is sent
     return config
@@ -19,7 +19,7 @@ myAxios.interceptors.request.use(
 )
 
 // 响应拦截器
-myAxios.interceptors.response.use(
+request.interceptors.response.use(
   function (response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
@@ -45,4 +45,4 @@ myAxios.interceptors.response.use(
   }
 )
 
-export default myAxios
+export default request

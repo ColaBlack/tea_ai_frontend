@@ -1,5 +1,6 @@
 <template>
-  $END$
+  <div id="header">
+  </div>
 </template>
 
 <script setup lang="ts">

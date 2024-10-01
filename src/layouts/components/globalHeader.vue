@@ -26,16 +26,18 @@ const router = useRouter()
 
 const selectedKeys = ref([router.currentRoute.value.path])
 
-watch(() => router.currentRoute.value.path, (newPath) => {
-  selectedKeys.value = [newPath]
-})
+watch(
+  () => router.currentRoute.value.path,
+  (newPath) => {
+    selectedKeys.value = [newPath]
+  }
+)
 
 const handleClick = (key: string) => {
   router.push({ path: key })
 }
 
 const visibleRoutes = routerList.filter((item: RouteRecordRaw) => item.meta?.hideInMenu !== true)
-
 </script>
 <style scoped>
 #header .logo {
@@ -50,6 +52,6 @@ const visibleRoutes = routerList.filter((item: RouteRecordRaw) => item.meta?.hid
   line-height: 16px;
   color: #000000;
   text-align: center;
-  font-family: "楷体", "Times New Roman", sans-serif;
+  font-family: '楷体', 'Times New Roman', sans-serif;
 }
 </style>

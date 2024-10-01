@@ -7,12 +7,10 @@
   </div>
 </template>
 
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <style scoped>
-#footer{
+#footer {
   padding: 10px;
   text-align: center;
   margin: 0 auto;

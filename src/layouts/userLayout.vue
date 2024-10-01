@@ -3,7 +3,7 @@
     <a-layout style="min-height: 100vh">
       <a-layout-header class="header">
         <a-space>
-          <img src="../assets/logo.png" class="logo"  alt="logo"/>
+          <img src="../assets/logo.png" class="logo" alt="logo" />
           <div>茶AI题库</div>
         </a-space>
       </a-layout-header>
@@ -21,6 +21,4 @@
 import GlobalFooter from '@/layouts/components/globalFooter.vue'
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

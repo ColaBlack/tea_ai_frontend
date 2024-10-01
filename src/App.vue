@@ -17,5 +17,4 @@ import GlobalLayout from '@/layouts/globalLayout.vue'
 const route = useRoute()
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

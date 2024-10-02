@@ -10,7 +10,7 @@
         搜索
       </template>
     </a-input-search>
-    <a-button type="primary" @click="handleAdd" style="margin-bottom: 10px; margin-left: 20px;">
+    <a-button type="primary" @click="addUserClick" style="margin-bottom: 10px; margin-left: 20px;">
       <template #icon>
         <icon-plus />
       </template>
@@ -42,7 +42,7 @@
         {{ dayjs(record.updateTime).format('YYYY-MM-DD HH:mm:ss') }}
       </template>
       <template #action="{ record }">
-        <a-button type="outline" @click="handleEdit(record)">编辑</a-button>
+        <a-button type="outline" @click="editUserClick(record)">编辑</a-button>
         <a-popconfirm content="你确定要删除该用户吗？" @ok="handleDelete(record)">
           <a-button type="primary" style="margin-left: 10px;">
             <template #icon>
@@ -53,12 +53,89 @@
         </a-popconfirm>
       </template>
     </a-table>
+    <div id="addUser">
+      <a-drawer :width="500" :visible="addUserVisible" @ok="addUserOk" @cancel="addUserCancel" unmountOnClose>
+        <template #title>
+          新增用户
+        </template>
+        <div class="add-user-form">
+          <a-form :model="addUserForm" label-width="80">
+            <a-form-item label="用户账号">
+              <a-input v-model="addUserForm.userAccount" />
+              <template #extra>
+                <div>账号由字母、数字，长度在4-20位之间，必须唯一</div>
+              </template>
+            </a-form-item>
+            <a-form-item label="用户昵称">
+              <a-input v-model="addUserForm.userName" />
+              <template #extra>
+                <div>昵称可为空，若为空则显示无昵称，可不唯一</div>
+              </template>
+            </a-form-item>
+            <a-form-item label="用户头像">
+              <a-input v-model="addUserForm.userAvatar" />
+              <template #extra>
+                <div>可为空，若为空则使用默认头像</div>
+              </template>
+            </a-form-item>
+            <a-form-item label="用户角色">
+              <a-input v-model="addUserForm.userRole" />
+              <template #extra>
+                <div>"admin"：超级管理员，"user"：普通用户,"ban"：封禁用户，三选一，默认为"user"</div>
+              </template>
+            </a-form-item>
+
+          </a-form>
+        </div>
+      </a-drawer>
+    </div>
+    <div id="editUser">
+      <a-drawer :width="500" :visible="editUserVisible" @ok="editUserOk" @cancel="editUserCancel" unmountOnClose>
+        <template #title>
+          编辑用户
+        </template>
+        <div class="add-user-form">
+          <a-form :model="editUserForm" label-width="80">
+            <a-form-item label="用户昵称">
+              <a-input v-model="editUserForm.userName" />
+              <template #extra>
+                <div>昵称可为空，若为空则显示无昵称，可不唯一</div>
+              </template>
+            </a-form-item>
+            <a-form-item label="用户简介">
+              <a-input v-model="editUserForm.userProfile" />
+              <template #extra>
+                <div>用户简介可为空</div>
+              </template>
+            </a-form-item>
+            <a-form-item label="用户头像">
+              <a-input v-model="editUserForm.userAvatar" />
+              <template #extra>
+                <div>可为空，若为空则使用默认头像</div>
+              </template>
+            </a-form-item>
+            <a-form-item label="用户角色">
+              <a-input v-model="editUserForm.userRole" />
+              <template #extra>
+                <div>"admin"：超级管理员，"user"：普通用户,"ban"：封禁用户，三选一，默认为"user"</div>
+              </template>
+            </a-form-item>
+
+          </a-form>
+        </div>
+      </a-drawer>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref, watchEffect } from 'vue'
-import { deleteUserUsingPost, listUserByPageUsingPost } from '@/api/userController'
+import {
+  addUserUsingPost,
+  deleteUserUsingPost,
+  listUserByPageUsingPost,
+  updateUserUsingPost
+} from '@/api/userController'
 import { Message, Modal } from '@arco-design/web-vue'
 import { dayjs } from '@arco-design/web-vue/es/_utils/date'
 import { IconDelete } from '@arco-design/web-vue/es/icon'
@@ -113,15 +190,64 @@ const handlePageChange = (page: number) => {
   searchParams.value = { ...searchParams.value, current: page }
 }
 
-const handleEdit = async (record: API.User) => {
-  // 跳转到编辑页面
-  // TODO
+const editUserVisible = ref(false)
+
+const editUserClick = (record: API.User) => {
+  editUserForm.id = record.id
+  editUserForm.userAvatar = record.userAvatar
+  editUserForm.userName = record.userName
+  editUserForm.userProfile = record.userProfile
+  editUserForm.userRole = record.userRole
+  editUserVisible.value = true
+}
+const editUserOk = async () => {
+  const res = await updateUserUsingPost(editUserForm)
+  if (res.data.code === 200) {
+    Message.success('修改用户成功')
+    await loadData()
+    editUserVisible.value = false
+  } else {
+    Message.error('修改用户失败:' + res.data.message)
+  }
+}
+const editUserCancel = () => {
+  editUserVisible.value = false
 }
 
-const handleAdd = () => {
-  // 跳转到新增页面
-  // TODO
+let editUserForm: API.UserUpdateRequest = reactive({
+  id: -1,
+  userAvatar: '',
+  userName: '',
+  userProfile: '',
+  userRole: ''
+})
+
+
+const addUserVisible = ref(false)
+
+const addUserClick = () => {
+  addUserVisible.value = true
 }
+const addUserOk = async () => {
+  const res = await addUserUsingPost(addUserForm)
+  if (res.data.code === 200) {
+    Message.success('新增用户成功')
+    await loadData()
+    addUserVisible.value = false
+  } else {
+    Message.error('新增用户失败:' + res.data.message)
+  }
+}
+const addUserCancel = () => {
+  addUserVisible.value = false
+}
+
+const addUserForm: API.UserAddRequest = reactive({
+  userAccount: '',
+  userName: '',
+  userAvatar: '',
+  userRole: ''
+})
 
 const handleDelete = async (record: API.User) => {
   // 在删除之前显示确认框

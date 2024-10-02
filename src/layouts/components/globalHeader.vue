@@ -25,6 +25,7 @@ import routerList from '@/router/router'
 import { type RouteRecordRaw, useRouter } from 'vue-router'
 import { ref, watch } from 'vue'
 import { userStore } from '@/store/user'
+import CheckAccess from '@/access/checkAccess'
 
 const loginUser = userStore().loginUser
 
@@ -38,12 +39,15 @@ watch(
     selectedKeys.value = [newPath]
   }
 )
-console.log(loginUser.id)
+
 const handleClick = (key: string) => {
   router.push({ path: key })
 }
 
-const visibleRoutes = routerList.filter((item: RouteRecordRaw) => item.meta?.hideInMenu !== true)
+const visibleRoutes = routerList.filter((item: RouteRecordRaw) => {
+  //只显示有权限的没隐藏的菜单
+  return item.meta?.hideInMenu !== true && CheckAccess(userStore().loginUser, item.meta?.access as string)
+})
 </script>
 <style scoped>
 #header .logo {

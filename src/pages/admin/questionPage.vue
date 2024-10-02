@@ -10,12 +10,6 @@
         搜索
       </template>
     </a-input-search>
-    <a-button type="primary" @click="handleAdd" style="margin-bottom: 10px; margin-left: 20px;">
-      <template #icon>
-        <icon-plus />
-      </template>
-      <template #default>新增用户</template>
-    </a-button>
     <a-table
       :columns="columns"
       :data="data"
@@ -43,14 +37,12 @@
       </template>
       <template #action="{ record }">
         <a-button type="outline" @click="handleEdit(record)">编辑</a-button>
-        <a-popconfirm content="你确定要删除该用户吗？" @ok="handleDelete(record)">
-          <a-button type="primary" style="margin-left: 10px;">
-            <template #icon>
-              <icon-delete />
-            </template>
-            <template #default>Delete</template>
-          </a-button>
-        </a-popconfirm>
+        <a-button type="primary" @click="handleDelete(record)" style="margin-left: 10px;">
+          <template #icon>
+            <icon-delete />
+          </template>
+          <template #default>Delete</template>
+        </a-button>
       </template>
     </a-table>
   </div>
@@ -118,16 +110,12 @@ const handleEdit = async (record: API.User) => {
   // TODO
 }
 
-const handleAdd = () => {
-  // 跳转到新增页面
-  // TODO
-}
 
 const handleDelete = async (record: API.User) => {
   // 在删除之前显示确认框
   Modal.confirm({
     title: '确认删除',
-    content: '确定要删除该用户吗？这将无法恢复。',
+    content: '确定要删除该用户吗？',
     onOk: async () => {
       const res = await deleteUserUsingPost({ id: record.id })
       if (res.data.code === 200) {

@@ -1,5 +1,13 @@
 <template>
   <div id="userPage">
+    <a-input-search class="search-input" placeholder="按名称搜索" search-button @search="handleSearch">
+      <template #button-icon>
+        <icon-search />
+      </template>
+      <template #button-default>
+        搜索
+      </template>
+    </a-input-search>
     <a-table
       :columns="columns"
       :data="data"
@@ -121,8 +129,15 @@ const handleDelete = async (record: API.User) => {
   })
 }
 
+const handleSearch = (value: string) => {
+  searchParams.value = { ...searchParams.value, userName: value }
+}
+
 </script>
 
 <style scoped>
-
+#userPage .search-input {
+  width: 320px;
+  margin-bottom: 10px;
+}
 </style>

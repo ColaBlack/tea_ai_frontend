@@ -25,15 +25,25 @@
       <template #updateTime="{ record }">
         {{ dayjs(record.updateTime).format('YYYY-MM-DD HH:mm:ss') }}
       </template>
+      <template #action="{ record }">
+        <a-button type="outline" @click="handleEdit(record)">编辑</a-button>
+        <a-button type="primary" @click="handleDelete(record)" style="margin-left: 10px;">
+          <template #icon>
+            <icon-delete />
+          </template>
+          <template #default>Delete</template>
+        </a-button>
+      </template>
     </a-table>
   </div>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref, watchEffect } from 'vue'
-import { listUserByPageUsingPost } from '@/api/userController'
-import { Message } from '@arco-design/web-vue'
-import { dayjs } from "@arco-design/web-vue/es/_utils/date";
+import { deleteUserUsingPost, listUserByPageUsingPost } from '@/api/userController'
+import { Message, Modal } from '@arco-design/web-vue'
+import { dayjs } from '@arco-design/web-vue/es/_utils/date'
+import { IconDelete } from '@arco-design/web-vue/es/icon'
 
 const form = reactive({
   border: true,
@@ -54,7 +64,8 @@ const columns = [
   { title: '用户简介', dataIndex: 'userProfile' },
   { title: '用户角色', dataIndex: 'userRole' },
   { title: '创建时间', dataIndex: 'createTime', slotName: 'createTime' },
-  { title: '更新时间', dataIndex: 'updateTime', slotName: 'updateTime' }
+  { title: '更新时间', dataIndex: 'updateTime', slotName: 'updateTime' },
+  { title: '用户操作', dataIndex: 'action', slotName: 'action' }
 ]
 
 const searchParams = ref<API.UserQueryRequest>({
@@ -83,6 +94,33 @@ watchEffect(() => {
 const handlePageChange = (page: number) => {
   searchParams.value = { ...searchParams.value, current: page }
 }
+
+const handleEdit = async (record: API.User) => {
+  // 跳转到编辑页面
+  // TODO
+}
+
+
+const handleDelete = async (record: API.User) => {
+  // 在删除之前显示确认框
+  Modal.confirm({
+    title: '确认删除',
+    content: '确定要删除该用户吗？',
+    onOk: async () => {
+      const res = await deleteUserUsingPost({ id: record.id })
+      if (res.data.code === 200) {
+        Message.success('删除成功')
+        loadData()
+      } else {
+        Message.error(res.data.message || '删除失败')
+      }
+    },
+    onCancel: () => {
+      Message.info('取消删除')
+    }
+  })
+}
+
 </script>
 
 <style scoped>

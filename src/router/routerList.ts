@@ -59,7 +59,7 @@ const routerList: Array<RouteRecordRaw> = [
   },
   {
     path: '/admin/bank',
-    name: '应用管理',
+    name: '题库管理',
     component: bankPage,
     meta: {
       access: roleEnums.ADMIN,

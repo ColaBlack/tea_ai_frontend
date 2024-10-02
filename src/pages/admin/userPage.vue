@@ -118,7 +118,7 @@ const handleDelete = async (record: API.User) => {
       const res = await deleteUserUsingPost({ id: record.id })
       if (res.data.code === 200) {
         Message.success('删除成功')
-        loadData()
+        await loadData()
       } else {
         Message.error(res.data.message || '删除失败')
       }

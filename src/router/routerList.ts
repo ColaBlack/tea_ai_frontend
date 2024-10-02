@@ -4,6 +4,8 @@ import LoginPage from '@/pages/loginPage.vue'
 import RegisterPage from '@/pages/registerPage.vue'
 import roleEnums from '@/access/roleEnums'
 import NoAuthPage from '@/pages/noAuthPage.vue'
+import testPage from '@/pages/testPage.vue'
+import UserPage from '@/pages/admin/userPage.vue'
 
 const routerList: Array<RouteRecordRaw> = [
   {
@@ -12,6 +14,15 @@ const routerList: Array<RouteRecordRaw> = [
     component: WelcomePage,
     meta: {
       access: roleEnums.PUBLIC,
+      hideInMenu: false
+    }
+  },
+  {
+    path: '/test',
+    name: '测试页面',
+    component: testPage,
+    meta: {
+      access: roleEnums.ADMIN,
       hideInMenu: false
     }
   },
@@ -41,6 +52,16 @@ const routerList: Array<RouteRecordRaw> = [
       access: roleEnums.PUBLIC,
       hideInMenu: true
     }
+  },
+  {
+    path: '/admin/user',
+    name: '用户管理',
+    component: UserPage,
+    meta: {
+      access: roleEnums.ADMIN,
+      hideInMenu: true
+    }
   }
+
 ]
 export default routerList

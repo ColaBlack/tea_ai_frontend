@@ -3,23 +3,23 @@
     <a-form :model="form" class="login-form" auto-label-width>
       <a-form-item field="userAccount" label="账号" :rules="[{ required: true, message: '账号是必填项' }]"
                    validate-trigger="blur">
-        <a-input v-model="form.userAccount" placeholder="请输入账号" />
+        <a-input allow-clear v-model="form.userAccount" placeholder="请输入账号" @press-enter="handleLogin" />
         <template #extra>
           <div>账号由字母、数字，长度在4-20位之间</div>
         </template>
       </a-form-item>
       <a-form-item field="userPassword" label="密码" :rules="[{ required: true, message: '密码是必填项' }]"
                    validate-trigger="blur">
-        <a-input v-model="form.userPassword" placeholder="请输入密码" type="password" />
+        <a-input-password allow-clear v-model="form.userPassword" placeholder="请输入密码" @press-enter="handleLogin" />
         <template #extra>
           <div>密码由字母、数字组成，长度在6-20位之间，但不能是纯数字或纯字母</div>
         </template>
       </a-form-item>
       <a-form-item>
-        <a-button class="login-btn" type="primary" @click="handleLogin">登录</a-button>
+        <a-button class="register-btn" type="primary" @click="handleLogin">登录</a-button>
       </a-form-item>
       <a-form-item>
-        <a-button class="login-btn" type="secondary" @click="handleRegister">去注册</a-button>
+        <a-button class="register-btn" type="secondary" @click="toRegister">去注册</a-button>
       </a-form-item>
     </a-form>
   </div>
@@ -53,7 +53,7 @@ const handleLogin = async () => {
   }
 }
 
-const handleRegister = () => {
+const toRegister = () => {
   router.push({
     path: '/user/register',
     replace: true
@@ -62,12 +62,13 @@ const handleRegister = () => {
 </script>
 
 <style scoped>
+
 #loginPage .login-form {
   max-width: 400px;
   margin: 100px auto auto auto;
 }
 
-#loginPage .login-btn {
+#loginPage .register-btn {
   margin: 0 auto;
   width: 100%;
   text-align: center;

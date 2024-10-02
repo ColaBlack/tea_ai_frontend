@@ -11,7 +11,10 @@
         </a-menu>
       </a-col>
       <a-col flex="64px">
-        <a-button type="primary" href="/user/login">登录</a-button>
+        <div v-if="loginUser.id">
+          {{ loginUser.userName ?? '无昵称' }}
+        </div>
+        <a-button v-else type="primary" href="/user/login">登录</a-button>
       </a-col>
     </a-row>
   </div>
@@ -21,6 +24,9 @@
 import routerList from '@/router/router'
 import { type RouteRecordRaw, useRouter } from 'vue-router'
 import { ref, watch } from 'vue'
+import { userStore } from '@/store/user'
+
+const loginUser = userStore().loginUser
 
 const router = useRouter()
 
@@ -32,7 +38,7 @@ watch(
     selectedKeys.value = [newPath]
   }
 )
-
+console.log(loginUser.id)
 const handleClick = (key: string) => {
   router.push({ path: key })
 }

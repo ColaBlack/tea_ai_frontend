@@ -13,8 +13,13 @@
 import { useRoute } from 'vue-router'
 import UserLayout from '@/layouts/userLayout.vue'
 import GlobalLayout from '@/layouts/globalLayout.vue'
+import { userStore } from '@/store/user'
 
 const route = useRoute()
+
+const loginUserStore = userStore()
+loginUserStore.fetchLoginUser()
+
 </script>
 
 <style scoped></style>

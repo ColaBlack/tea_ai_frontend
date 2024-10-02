@@ -14,6 +14,7 @@
     "openapi": "node src/config/openapi.config.js"
   },
   "dependencies": {
+    "@arco-themes/vue-taolu-publishing-platform": "^0.0.2",
     "axios": "^1.7.7",
     "pinia": "^2.1.7",
     "vue": "^3.4.29",

@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@arco-themes/vue-taolu-publishing-platform':
+        specifier: ^0.0.2
+        version: 0.0.2(@arco-design/web-vue@2.56.2(vue@3.5.10(typescript@5.4.5)))
       axios:
         specifier: ^1.7.7
         version: 1.7.7
@@ -79,6 +82,11 @@ packages:
     resolution: {integrity: sha512-tKSED9mGWaaJ1QUHhJtk0o/N9LHMiShVJwZRUynk2UxEnwMpQ81rI5LRDE0DbJl9GEIRMEiXVP3scp7g3Oe8yA==}
     peerDependencies:
       vue: ^3.1.0
+
+  '@arco-themes/vue-taolu-publishing-platform@0.0.2':
+    resolution: {integrity: sha512-LPMzx/Lf8L20eyiD1w3mNacdz4cthd6K312D83No4QniHbxy+BWqhs919DK52RsIAVCI9IXRxP4q759YVorfjw==}
+    peerDependencies:
+      '@arco-design/web-vue': ^2.37.1
 
   '@babel/code-frame@7.24.7':
     resolution: {integrity: sha512-BcYH1CVJBO9tvyIZ2jVeXgSIMvGZ2FDRvDdOIVQyuklNKSsx+eppDEBq/g47Ayw+RqNFE+URvOShmf+f/qwAlA==}
@@ -1568,6 +1576,10 @@ snapshots:
       resize-observer-polyfill: 1.5.1
       scroll-into-view-if-needed: 2.2.31
       vue: 3.5.10(typescript@5.4.5)
+
+  '@arco-themes/vue-taolu-publishing-platform@0.0.2(@arco-design/web-vue@2.56.2(vue@3.5.10(typescript@5.4.5)))':
+    dependencies:
+      '@arco-design/web-vue': 2.56.2(vue@3.5.10(typescript@5.4.5))
 
   '@babel/code-frame@7.24.7':
     dependencies:

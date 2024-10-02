@@ -1,8 +1,8 @@
 <template>
   <div id="footer">
     <a-space direction="vertical" fill>
-      <a href="https://github.com/colablack" target="_blank">我的github主页</a>
-      <a href="https://gitee.com/colablack" target="_blank">我的gitee主页</a>
+      <a-link href="https://github.com/colablack" target="_blank" icon>我的github主页</a-link>
+      <a-link href="https://gitee.com/colablack" target="_blank" icon>我的gitee主页</a-link>
     </a-space>
   </div>
 </template>

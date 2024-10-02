@@ -24,7 +24,7 @@ router.beforeEach(async (to, _, next) => {
         return
       }
       // 如果用户登录了，但是没有权限访问该页面
-      if (checkAccess(loginUser.userRole, neededRoles as string)) {
+      if (!checkAccess(loginUser, neededRoles as string)) {
         next('/403')
       }
     }

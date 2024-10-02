@@ -8,7 +8,7 @@ import './router/index'
 import ArcoVue from '@arco-design/web-vue'
 import '@arco-themes/vue-taolu-publishing-platform/css/arco.css'
 
-import '@/access/index'
+import '@/access'
 
 const app = createApp(App)
 

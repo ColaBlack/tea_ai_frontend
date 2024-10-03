@@ -60,7 +60,7 @@
         <div class="add-user-form">
           <a-form :model="addUserForm" label-width="80">
             <a-form-item label="用户账号">
-              <a-input v-model="addUserForm.userAccount" />
+              <a-input v-model="addUserForm.bankName" />
               <template #extra>
                 <div>账号由字母、数字，长度在4-20位之间，必须唯一</div>
               </template>
@@ -242,7 +242,7 @@ const addUserCancel = () => {
 }
 
 const addUserForm: API.UserAddRequest = reactive({
-  userAccount: '',
+  bankName: '',
   userName: '',
   userAvatar: '',
   userRole: ''

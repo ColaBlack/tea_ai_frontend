@@ -9,11 +9,11 @@
         搜索
       </template>
     </a-input-search>
-    <a-button type="primary" @click="addUserClick" style="margin-bottom: 10px; margin-left: 20px;">
+    <a-button type="primary" @click="addBankClick" style="margin-bottom: 10px; margin-left: 20px;">
       <template #icon>
         <icon-plus />
       </template>
-      <template #default>新增用户</template>
+      <template #default>新增题库</template>
     </a-button>
     <a-table
       :columns="columns"
@@ -21,7 +21,7 @@
       :bordered="true"
       :hoverable="true"
       :stripe="true"
-      :loading="form.loading"
+      :loading="loading"
       :show-header="true"
       :pagination="{
         showTotal:true,
@@ -31,8 +31,20 @@
       }"
       @page-change="handlePageChange"
     >
-      <template #userAvatar="{ record }">
-        <a-image width="64" :src="record.userAvatar" />
+      <template #bankIcon="{ record }">
+        <a-image width="64" :src="record.bankIcon" />
+      </template>
+      <template #bankType="{ record }">
+        {{ BANK_TYPE[record.bankType as 0 | 1] || '未知题库类型' }}
+      </template>
+      <template #scoringStrategy="{ record }">
+        {{ SCORING_STRATEGY[record.scoringStrategy as 0 | 1] || '未知评分策略' }}
+      </template>
+      <template #reviewStatus="{ record }">
+        {{ REVIEW_STATUS[record.reviewStatus as 0 | 1 | 2] || '未知审核状态' }}
+      </template>
+      <template #reviewTime="{ record }">
+        {{ dayjs(record.reviewTime).format('YYYY-MM-DD HH:mm:ss') }}
       </template>
       <template #createTime="{ record }">
         {{ dayjs(record.createTime).format('YYYY-MM-DD HH:mm:ss') }}
@@ -41,8 +53,8 @@
         {{ dayjs(record.updateTime).format('YYYY-MM-DD HH:mm:ss') }}
       </template>
       <template #action="{ record }">
-        <a-button type="outline" @click="editUserClick(record)">编辑</a-button>
-        <a-popconfirm content="你确定要删除该用户吗？" @ok="handleDelete(record)">
+        <a-button type="outline" @click="editBankClick(record)">编辑</a-button>
+        <a-popconfirm content="你确定要删除该题库吗？" @ok="handleDelete(record)">
           <a-button type="primary" style="margin-left: 10px;">
             <template #icon>
               <icon-delete />
@@ -50,76 +62,82 @@
             <template #default>Delete</template>
           </a-button>
         </a-popconfirm>
+        <a-button
+          v-if="record.reviewStatus !== REVIEW_STATUS[REVIEW_ENUMS.APPROVED]"
+          status="success"
+          @click="doReview(record, REVIEW_ENUMS.APPROVED, '')"
+        >
+          通过
+        </a-button>
+        <a-button
+          v-if="record.reviewStatus !== REVIEW_STATUS[REVIEW_ENUMS.REJECTED]"
+          status="warning" style="margin-left: 10px;margin-top: 10px;"
+          @click="doReview(record, REVIEW_ENUMS.REJECTED, '审核不合格，请修改后重新提交')"
+        >
+          拒绝
+        </a-button>
       </template>
     </a-table>
-    <div id="addUser">
-      <a-drawer :width="500" :visible="addUserVisible" @ok="addUserOk" @cancel="addUserCancel" unmountOnClose>
+    <div id="addBank">
+      <a-drawer :width="500" :visible="addBankVisible" @ok="addBankOk" @cancel="addBankCancel" unmountOnClose>
         <template #title>
-          新增用户
+          新增题库
         </template>
-        <div class="add-user-form">
-          <a-form :model="addUserForm" label-width="80">
-            <a-form-item label="用户账号">
-              <a-input v-model="addUserForm.userAccount" />
+        <div class="add-bank-form">
+          <a-form :model="addBankForm" label-width="80">
+            <a-form-item label="题库名称">
+              <a-input v-model="addBankForm.bankName" />
+            </a-form-item>
+            <a-form-item label="题库描述">
+              <a-input v-model="addBankForm.bankDesc" />
+            </a-form-item>
+            <a-form-item label="题库头像">
+              <a-input v-model="addBankForm.bankIcon" />
+            </a-form-item>
+            <a-form-item label="题库类型">
+              <a-input v-model="addBankForm.bankType" />
               <template #extra>
-                <div>账号由字母、数字，长度在4-20位之间，必须唯一</div>
+                <div>不能为空，0表示得分类题库,1表示测评类题库</div>
               </template>
             </a-form-item>
-            <a-form-item label="用户昵称">
-              <a-input v-model="addUserForm.userName" />
+            <a-form-item label="评分策略">
+              <a-input v-model="addBankForm.scoringStrategy" />
               <template #extra>
-                <div>昵称可为空，若为空则显示无昵称，可不唯一</div>
+                <div>不能为空，0表示自定义评分策略,1表示ai评分策略</div>
               </template>
             </a-form-item>
-            <a-form-item label="用户头像">
-              <a-input v-model="addUserForm.userAvatar" />
-              <template #extra>
-                <div>可为空，若为空则使用默认头像</div>
-              </template>
-            </a-form-item>
-            <a-form-item label="用户角色">
-              <a-input v-model="addUserForm.userRole" />
-              <template #extra>
-                <div>"admin"：超级管理员，"user"：普通用户,"ban"：封禁用户，三选一，默认为"user"</div>
-              </template>
-            </a-form-item>
-
           </a-form>
         </div>
       </a-drawer>
     </div>
-    <div id="editUser">
-      <a-drawer :width="500" :visible="editUserVisible" @ok="editUserOk" @cancel="editUserCancel" unmountOnClose>
+    <div id="editBank">
+      <a-drawer :width="500" :visible="editBankVisible" @ok="editBankOk" @cancel="editBankCancel" unmountOnClose>
         <template #title>
-          编辑用户
+          编辑题库
         </template>
         <div class="add-user-form">
-          <a-form :model="editUserForm" label-width="80">
-            <a-form-item label="用户昵称">
-              <a-input v-model="editUserForm.userName" />
+          <a-form :model="editBankForm" label-width="80">
+            <a-form-item label="题库名称">
+              <a-input v-model="editBankForm.bankName" />
+            </a-form-item>
+            <a-form-item label="题库图标">
+              <a-input v-model="editBankForm.bankIcon" />
+            </a-form-item>
+            <a-form-item label="题库描述">
+              <a-input v-model="editBankForm.bankDesc" />
+            </a-form-item>
+            <a-form-item label="题库类型">
+              <a-input v-model="editBankForm.bankType" />
               <template #extra>
-                <div>昵称可为空，若为空则显示无昵称，可不唯一</div>
+                <div>0表示得分类题库，1表示测评类题库</div>
               </template>
             </a-form-item>
-            <a-form-item label="用户简介">
-              <a-input v-model="editUserForm.userProfile" />
+            <a-form-item label="题库评分策略">
+              <a-input v-model="editBankForm.scoringStrategy" />
               <template #extra>
-                <div>用户简介可为空</div>
+                <div>0表示自定义评分策略，1表示AI评分策略</div>
               </template>
             </a-form-item>
-            <a-form-item label="用户头像">
-              <a-input v-model="editUserForm.userAvatar" />
-              <template #extra>
-                <div>可为空，若为空则使用默认头像</div>
-              </template>
-            </a-form-item>
-            <a-form-item label="用户角色">
-              <a-input v-model="editUserForm.userRole" />
-              <template #extra>
-                <div>"admin"：超级管理员，"user"：普通用户,"ban"：封禁用户，三选一，默认为"user"</div>
-              </template>
-            </a-form-item>
-
           </a-form>
         </div>
       </a-drawer>
@@ -129,55 +147,55 @@
 
 <script setup lang="ts">
 import { reactive, ref, watchEffect } from 'vue'
-import {
-  addUserUsingPost,
-  deleteUserUsingPost,
-  listUserByPageUsingPost,
-  updateUserUsingPost
-} from '@/api/userController'
 import { Message, Modal } from '@arco-design/web-vue'
 import { dayjs } from '@arco-design/web-vue/es/_utils/date'
 import { IconDelete } from '@arco-design/web-vue/es/icon'
+import {
+  addQuestionBankUsingPost,
+  deleteQuestionBankUsingPost,
+  listQuestionBankByPageUsingPost,
+  questionBankReviewUsingPost,
+  updateQuestionBankUsingPost
+} from '@/api/questionBankController'
+import { BANK_TYPE, REVIEW_ENUMS, REVIEW_STATUS, SCORING_STRATEGY } from '@/enums/bankEnums'
 
-const form = reactive({
-  border: true,
-  borderCell: false,
-  hover: true,
-  stripe: false,
-  checkbox: true,
-  loading: false,
-  tableHeader: true,
-  noData: false
-})
+const loading = ref(true)
 
 const columns = [
-  { title: '用户ID', dataIndex: 'id' },
-  { title: '用户账号', dataIndex: 'userAccount' },
-  { title: '用户昵称', dataIndex: 'userName' },
-  { title: '用户头像', dataIndex: 'userAvatar', slotName: 'userAvatar' },
-  { title: '用户简介', dataIndex: 'userProfile' },
-  { title: '用户角色', dataIndex: 'userRole' },
+  { title: '题库id', dataIndex: 'id' },
+  { title: '题库名称', dataIndex: 'bankName' },
+  { title: '题库描述', dataIndex: 'bankDesc' },
+  { title: '题库图标', dataIndex: 'bankIcon', slotName: 'bankIcon' },
+  { title: '应用类型', dataIndex: 'bankType', slotName: 'bankType' },
+  { title: '评分策略', dataIndex: 'scoringStrategy', slotName: 'scoringStrategy' },
+  { title: '审核状态', dataIndex: 'reviewStatus', slotName: 'reviewStatus' },
+  { title: '审核信息', dataIndex: 'reviewMessage' },
+  { title: '审核时间', dataIndex: 'reviewTime', slotName: 'reviewTime' },
+  { title: '审核人 id', dataIndex: 'reviewerId' },
+  { title: '用户 id', dataIndex: 'userId' },
   { title: '创建时间', dataIndex: 'createTime', slotName: 'createTime' },
   { title: '更新时间', dataIndex: 'updateTime', slotName: 'updateTime' },
-  { title: '用户操作', dataIndex: 'action', slotName: 'action' }
+  { title: '题库操作', dataIndex: 'action', slotName: 'action' }
 ]
 
-const searchParams = ref<API.UserQueryRequest>({
+const searchParams = ref<API.QuestionBankQueryRequest>({
   current: 1,
   pageSize: 10
 })
 
-const data = ref<API.User[]>([])
+const data = ref<API.QuestionBank []>([])
 const total = ref<number>(0)
 
 const loadData = async () => {
-  const res = await listUserByPageUsingPost(searchParams.value)
+  loading.value = true
+  const res = await listQuestionBankByPageUsingPost(searchParams.value)
   if (res.data.code === 200) {
     data.value = res.data.data?.records || []
     total.value = res.data.data?.total || 0
   } else {
     Message.error(res.data.message || '数据加载失败')
   }
+  loading.value = false
 }
 
 // 监听搜索条件变化，重新加载数据
@@ -189,72 +207,71 @@ const handlePageChange = (page: number) => {
   searchParams.value = { ...searchParams.value, current: page }
 }
 
-const editUserVisible = ref(false)
+const editBankVisible = ref(false)
 
-const editUserClick = (record: API.User) => {
-  editUserForm.id = record.id
-  editUserForm.userAvatar = record.userAvatar
-  editUserForm.userName = record.userName
-  editUserForm.userProfile = record.userProfile
-  editUserForm.userRole = record.userRole
-  editUserVisible.value = true
+const editBankClick = (record: API.QuestionBank) => {
+  editBankForm.bankName = record.bankName
+  editBankForm.bankDesc = record.bankDesc
+  editBankForm.bankIcon = record.bankIcon
+  editBankForm.bankType = record.bankType
+  editBankForm.scoringStrategy = record.scoringStrategy
+  editBankForm.id = record.id
+  editBankVisible.value = true
 }
-const editUserOk = async () => {
-  const res = await updateUserUsingPost(editUserForm)
+const editBankOk = async () => {
+  const res = await updateQuestionBankUsingPost(editBankForm)
   if (res.data.code === 200) {
-    Message.success('修改用户成功')
+    Message.success('修改题库成功')
     await loadData()
-    editUserVisible.value = false
+    editBankVisible.value = false
   } else {
-    Message.error('修改用户失败:' + res.data.message)
+    Message.error('修改题库失败:' + res.data.message)
   }
 }
-const editUserCancel = () => {
-  editUserVisible.value = false
+const editBankCancel = () => {
+  editBankVisible.value = false
 }
 
-let editUserForm: API.UserUpdateRequest = reactive({
-  id: -1,
-  userAvatar: '',
-  userName: '',
-  userProfile: '',
-  userRole: ''
+let editBankForm: API.QuestionBankEditRequest = reactive({
+  bankDesc: '',
+  bankIcon: '',
+  bankName: ''
 })
 
 
-const addUserVisible = ref(false)
+const addBankVisible = ref(false)
 
-const addUserClick = () => {
-  addUserVisible.value = true
+const addBankClick = () => {
+  addBankVisible.value = true
 }
-const addUserOk = async () => {
-  const res = await addUserUsingPost(addUserForm)
+const addBankOk = async () => {
+  console.log(addBankForm)
+  const res = await addQuestionBankUsingPost(addBankForm)
   if (res.data.code === 200) {
-    Message.success('新增用户成功')
+    Message.success('新增题库成功')
     await loadData()
-    addUserVisible.value = false
+    addBankVisible.value = false
   } else {
-    Message.error('新增用户失败:' + res.data.message)
+    Message.error('新增题库失败:' + res.data.message)
   }
 }
-const addUserCancel = () => {
-  addUserVisible.value = false
+const addBankCancel = () => {
+  addBankVisible.value = false
 }
 
-const addUserForm: API.UserAddRequest = reactive({
-  userAccount: '',
-  userName: '',
-  userAvatar: '',
-  userRole: ''
+const addBankForm: API.QuestionBankAddRequest = reactive({
+  bankDesc: '',
+  bankIcon: '',
+  bankName: ''
 })
 
 const handleDelete = async (record: API.User) => {
   // 在删除之前显示确认框
   Modal.confirm({
     title: '确认删除',
-    content: '确定要删除该用户吗？这将无法恢复。',
+    content: '确定要删除该题库吗？这将无法恢复。',
     onOk: async () => {
-      const res = await deleteUserUsingPost({ id: record.id })
+      const res = await deleteQuestionBankUsingPost({ id: record.id })
       if (res.data.code === 200) {
         Message.success('删除成功')
         await loadData()
@@ -269,9 +286,23 @@ const handleDelete = async (record: API.User) => {
 }
 
 const handleSearch = (value: string) => {
-  searchParams.value = { ...searchParams.value, userName: value }
+  searchParams.value = { ...searchParams.value, bankName: value }
 }
 
+const doReview = async (record: API.QuestionBank, reviewStatus: number, reviewMessage: string) => {
+  const params: API.ReviewRequest = {
+    id: record.id,
+    reviewStatus: reviewStatus,
+    reviewMessage: reviewMessage
+  }
+  const res = await questionBankReviewUsingPost(params)
+  if (res.data.code === 200) {
+    Message.success('审核成功') // 刷新页面
+    await loadData()
+  } else {
+    Message.error('审核失败:' + res.data.message)
+  }
+}
 </script>
 
 <style scoped>

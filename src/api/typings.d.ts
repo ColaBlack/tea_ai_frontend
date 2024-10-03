@@ -521,7 +521,7 @@ declare namespace API {
   }
 
   type UserAddRequest = {
-    userAccount?: string
+    bankName?: string
     userAvatar?: string
     userName?: string
     userRole?: string

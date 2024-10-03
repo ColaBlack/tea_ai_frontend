@@ -11,6 +11,7 @@
           <img
             :style="{ width: '100%',transform: 'translateY(-10px)' }"
             :src="bank.bankIcon"
+            :alt="bank.bankName"
           />
         </div>
       </template>

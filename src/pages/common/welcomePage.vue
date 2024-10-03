@@ -1,3 +1,4 @@
+<!--suppress VueUnrecognizedSlot -->
 <template>
   <div id="home-page">
     <a-input-search class="search-input" placeholder="按名称搜索题库" search-button @search="handleSearch" allow-clear size="large">

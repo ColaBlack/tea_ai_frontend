@@ -14,7 +14,7 @@ import NotFoundPage from '@/pages/common/notFoundPage.vue'
 export const routerList: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: '欢迎',
+    name: '主页',
     component: WelcomePage,
     meta: {
       access: roleEnums.PUBLIC,

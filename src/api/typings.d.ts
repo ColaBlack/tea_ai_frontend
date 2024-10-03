@@ -316,7 +316,7 @@ declare namespace API {
   }
 
   type QuestionAddRequest = {
-    appId?: number
+    questionBankId?: number
     questionContent?: QuestionContentDTO[]
   }
 
@@ -411,7 +411,7 @@ declare namespace API {
   }
 
   type QuestionUpdateRequest = {
-    id?: number
+    questionBankId?: number
     questionContent?: QuestionContentDTO[]
   }
 
@@ -521,7 +521,7 @@ declare namespace API {
   }
 
   type UserAddRequest = {
-    bankName?: string
+    userAccount?: string
     userAvatar?: string
     userName?: string
     userRole?: string

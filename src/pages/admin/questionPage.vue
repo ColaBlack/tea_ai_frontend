@@ -1,7 +1,7 @@
 <!--suppress VueUnrecognizedSlot -->
 <template>
-  <div id="userPage">
-    <a-input-search class="search-input" placeholder="按名称搜索" search-button @search="handleSearch" allow-clear>
+  <div id="questionPage">
+    <a-input-search class="search-input" placeholder="按内容搜索" search-button @search="handleSearch" allow-clear>
       <template #button-icon>
         <icon-search />
       </template>
@@ -9,11 +9,11 @@
         搜索
       </template>
     </a-input-search>
-    <a-button type="primary" @click="addUserClick" style="margin-bottom: 10px; margin-left: 20px;">
+    <a-button type="primary" @click="addQuestionClick" style="margin-bottom: 10px; margin-left: 20px;">
       <template #icon>
         <icon-plus />
       </template>
-      <template #default>新增用户</template>
+      <template #default>新增题目</template>
     </a-button>
     <a-table
       :columns="columns"
@@ -31,9 +31,6 @@
       }"
       @page-change="handlePageChange"
     >
-      <template #userAvatar="{ record }">
-        <a-image width="64" :src="record.userAvatar" />
-      </template>
       <template #createTime="{ record }">
         {{ dayjs(record.createTime).format('YYYY-MM-DD HH:mm:ss') }}
       </template>
@@ -41,8 +38,8 @@
         {{ dayjs(record.updateTime).format('YYYY-MM-DD HH:mm:ss') }}
       </template>
       <template #action="{ record }">
-        <a-button type="outline" @click="editUserClick(record)">编辑</a-button>
-        <a-popconfirm content="你确定要删除该用户吗？" @ok="handleDelete(record)">
+        <a-button type="outline" @click="editQuestionClick(record)">编辑</a-button>
+        <a-popconfirm content="你确定要删除该题目吗？" @ok="handleDelete(record)">
           <a-button type="primary" style="margin-left: 10px;">
             <template #icon>
               <icon-delete />
@@ -52,74 +49,44 @@
         </a-popconfirm>
       </template>
     </a-table>
-    <div id="addUser">
-      <a-drawer :width="500" :visible="addUserVisible" @ok="addUserOk" @cancel="addUserCancel" unmountOnClose>
+    <div id="addQuestion">
+      <a-drawer :width="500" :visible="addQuestionVisible" @ok="addQuestionOk" @cancel="addQuestionCancel"
+                unmountOnClose>
         <template #title>
-          新增用户
+          新增题目
         </template>
-        <div class="add-user-form">
-          <a-form :model="addUserForm" label-width="80">
-            <a-form-item label="用户账号">
-              <a-input v-model="addUserForm.bankName" />
+        <div class="add-question-form">
+          <a-form :model="addQuestionForm" label-width="80">
+            <a-form-item label="所属题库ID">
+              <a-input v-model="addQuestionForm.questionBankId" />
+            </a-form-item>
+            <a-form-item label="题目内容">
+              <a-input v-model="addQuestionForm.questionContent" />
               <template #extra>
-                <div>账号由字母、数字，长度在4-20位之间，必须唯一</div>
+                <div>JSON字符串</div>
               </template>
             </a-form-item>
-            <a-form-item label="用户昵称">
-              <a-input v-model="addUserForm.userName" />
-              <template #extra>
-                <div>昵称可为空，若为空则显示无昵称，可不唯一</div>
-              </template>
-            </a-form-item>
-            <a-form-item label="用户头像">
-              <a-input v-model="addUserForm.userAvatar" />
-              <template #extra>
-                <div>可为空，若为空则使用默认头像</div>
-              </template>
-            </a-form-item>
-            <a-form-item label="用户角色">
-              <a-input v-model="addUserForm.userRole" />
-              <template #extra>
-                <div>"admin"：超级管理员，"user"：普通用户,"ban"：封禁用户，三选一，默认为"user"</div>
-              </template>
-            </a-form-item>
-
           </a-form>
         </div>
       </a-drawer>
     </div>
-    <div id="editUser">
-      <a-drawer :width="500" :visible="editUserVisible" @ok="editUserOk" @cancel="editUserCancel" unmountOnClose>
+    <div id="editQuestion">
+      <a-drawer :width="500" :visible="editQuestionVisible" @ok="editQuestionOk" @cancel="editQuestionCancel"
+                unmountOnClose>
         <template #title>
-          编辑用户
+          编辑题目
         </template>
-        <div class="add-user-form">
-          <a-form :model="editUserForm" label-width="80">
-            <a-form-item label="用户昵称">
-              <a-input v-model="editUserForm.userName" />
+        <div class="add-question-form">
+          <a-form :model="editQuestionForm" label-width="80">
+            <a-form-item label="题库ID">
+              <a-input v-model="editQuestionForm.questionBankId" />
+            </a-form-item>
+            <a-form-item label="题目内容">
+              <a-input v-model="editQuestionForm.questionContent" />
               <template #extra>
-                <div>昵称可为空，若为空则显示无昵称，可不唯一</div>
+                <div>JSON字符串</div>
               </template>
             </a-form-item>
-            <a-form-item label="用户简介">
-              <a-input v-model="editUserForm.userProfile" />
-              <template #extra>
-                <div>用户简介可为空</div>
-              </template>
-            </a-form-item>
-            <a-form-item label="用户头像">
-              <a-input v-model="editUserForm.userAvatar" />
-              <template #extra>
-                <div>可为空，若为空则使用默认头像</div>
-              </template>
-            </a-form-item>
-            <a-form-item label="用户角色">
-              <a-input v-model="editUserForm.userRole" />
-              <template #extra>
-                <div>"admin"：超级管理员，"user"：普通用户,"ban"：封禁用户，三选一，默认为"user"</div>
-              </template>
-            </a-form-item>
-
           </a-form>
         </div>
       </a-drawer>
@@ -130,11 +97,11 @@
 <script setup lang="ts">
 import { reactive, ref, watchEffect } from 'vue'
 import {
-  addUserUsingPost,
-  deleteUserUsingPost,
-  listUserByPageUsingPost,
-  updateUserUsingPost
-} from '@/api/userController'
+  addQuestionUsingPost,
+  deleteQuestionUsingPost,
+  listQuestionByPageUsingPost,
+  updateQuestionUsingPost
+} from '@/api/questionController'
 import { Message, Modal } from '@arco-design/web-vue'
 import { dayjs } from '@arco-design/web-vue/es/_utils/date'
 import { IconDelete } from '@arco-design/web-vue/es/icon'
@@ -151,27 +118,25 @@ const form = reactive({
 })
 
 const columns = [
-  { title: '用户ID', dataIndex: 'id' },
-  { title: '用户账号', dataIndex: 'userAccount' },
-  { title: '用户昵称', dataIndex: 'userName' },
-  { title: '用户头像', dataIndex: 'userAvatar', slotName: 'userAvatar' },
-  { title: '用户简介', dataIndex: 'userProfile' },
-  { title: '用户角色', dataIndex: 'userRole' },
+  { title: 'id', dataIndex: 'id' },
+  { title: '题目内容', dataIndex: 'questionContent', slotName: 'questionContent' },
+  { title: '题库id', dataIndex: 'bankid' },
+  { title: '创建人id', dataIndex: 'userid' },
   { title: '创建时间', dataIndex: 'createTime', slotName: 'createTime' },
   { title: '更新时间', dataIndex: 'updateTime', slotName: 'updateTime' },
-  { title: '用户操作', dataIndex: 'action', slotName: 'action' }
+  { title: '操作', dataIndex: 'action', slotName: 'action' }
 ]
 
-const searchParams = ref<API.UserQueryRequest>({
+const searchParams = ref<API.QuestionQueryRequest>({
   current: 1,
   pageSize: 10
 })
 
-const data = ref<API.User[]>([])
+const data = ref<API.Question[]>([])
 const total = ref<number>(0)
 
 const loadData = async () => {
-  const res = await listUserByPageUsingPost(searchParams.value)
+  const res = await listQuestionByPageUsingPost(searchParams.value)
   if (res.data.code === 200) {
     data.value = res.data.data?.records || []
     total.value = res.data.data?.total || 0
@@ -189,72 +154,66 @@ const handlePageChange = (page: number) => {
   searchParams.value = { ...searchParams.value, current: page }
 }
 
-const editUserVisible = ref(false)
+const editQuestionVisible = ref(false)
 
-const editUserClick = (record: API.User) => {
-  editUserForm.id = record.id
-  editUserForm.userAvatar = record.userAvatar
-  editUserForm.userName = record.userName
-  editUserForm.userProfile = record.userProfile
-  editUserForm.userRole = record.userRole
-  editUserVisible.value = true
+const editQuestionClick = (record: API.Question) => {
+  editQuestionForm.questionBankId = record.bankid
+  editQuestionForm.questionContent = JSON.parse(record.questionContent as string)
+  editQuestionVisible.value = true
 }
-const editUserOk = async () => {
-  const res = await updateUserUsingPost(editUserForm)
+const editQuestionOk = async () => {
+  const res = await updateQuestionUsingPost(editQuestionForm)
   if (res.data.code === 200) {
-    Message.success('修改用户成功')
+    Message.success('修改题目成功')
     await loadData()
-    editUserVisible.value = false
+    editQuestionVisible.value = false
   } else {
-    Message.error('修改用户失败:' + res.data.message)
+    Message.error('修改题目失败:' + res.data.message)
   }
 }
-const editUserCancel = () => {
-  editUserVisible.value = false
+const editQuestionCancel = () => {
+  editQuestionVisible.value = false
 }
 
-let editUserForm: API.UserUpdateRequest = reactive({
-  id: -1,
-  userAvatar: '',
-  userName: '',
-  userProfile: '',
-  userRole: ''
+let editQuestionForm: API.QuestionUpdateRequest = reactive({
+  questionContent: []
 })
 
 
-const addUserVisible = ref(false)
+const addQuestionVisible = ref(false)
 
-const addUserClick = () => {
-  addUserVisible.value = true
+const addQuestionClick = () => {
+  addQuestionVisible.value = true
 }
-const addUserOk = async () => {
-  const res = await addUserUsingPost(addUserForm)
+const addQuestionOk = async () => {
+  console.log(addQuestionForm)
+  const res = await addQuestionUsingPost({
+    questionContent: addQuestionForm.questionContent,
+    questionBankId: addQuestionForm.questionBankId
+  })
   if (res.data.code === 200) {
-    Message.success('新增用户成功')
+    Message.success('新增题目成功')
     await loadData()
-    addUserVisible.value = false
+    addQuestionVisible.value = false
   } else {
-    Message.error('新增用户失败:' + res.data.message)
+    Message.error('新增题目失败:' + res.data.message)
   }
 }
-const addUserCancel = () => {
-  addUserVisible.value = false
+const addQuestionCancel = () => {
+  addQuestionVisible.value = false
 }
 
-const addUserForm: API.UserAddRequest = reactive({
-  bankName: '',
-  userName: '',
-  userAvatar: '',
-  userRole: ''
+const addQuestionForm: API.QuestionAddRequest = reactive({
+  questionContent: []
 })
 
-const handleDelete = async (record: API.User) => {
+const handleDelete = async (record: API.Question) => {
   // 在删除之前显示确认框
   Modal.confirm({
     title: '确认删除',
-    content: '确定要删除该用户吗？这将无法恢复。',
+    content: '确定要删除该题目吗？这将无法恢复。',
     onOk: async () => {
-      const res = await deleteUserUsingPost({ id: record.id })
+      const res = await deleteQuestionUsingPost({ id: record.id })
       if (res.data.code === 200) {
         Message.success('删除成功')
         await loadData()
@@ -269,13 +228,13 @@ const handleDelete = async (record: API.User) => {
 }
 
 const handleSearch = (value: string) => {
-  searchParams.value = { ...searchParams.value, userName: value }
+  searchParams.value = { ...searchParams.value, questionContent: value }
 }
 
 </script>
 
 <style scoped>
-#userPage .search-input {
+#questionPage .search-input {
   width: 320px;
   margin-bottom: 10px;
 }

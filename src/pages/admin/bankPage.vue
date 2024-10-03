@@ -55,7 +55,7 @@
       <template #action="{ record }">
         <a-button type="outline" @click="editBankClick(record)">编辑</a-button>
         <a-popconfirm content="你确定要删除该题库吗？" @ok="handleDelete(record)">
-          <a-button type="primary" style="margin-left: 10px;">
+          <a-button status="danger" type="primary" style="margin-left: 10px;">
             <template #icon>
               <icon-delete />
             </template>

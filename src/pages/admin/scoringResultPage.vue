@@ -43,7 +43,7 @@
       <template #action="{ record }">
         <a-button type="outline" @click="editScoringResultClick(record)">编辑</a-button>
         <a-popconfirm content="你确定要删除该评分结果吗？" @ok="handleDelete(record)">
-          <a-button type="primary">
+          <a-button status="danger" type="primary">
             <template #icon>
               <icon-delete />
             </template>

@@ -11,6 +11,9 @@ import questionPage from '@/pages/admin/questionPage.vue'
 import scoringResultPage from '@/pages/admin/scoringResultPage.vue'
 import NotFoundPage from '@/pages/common/notFoundPage.vue'
 import bankDetailPage from '@/pages/bank/bankDetailPage.vue'
+import BankAddPage from '@/pages/bank/bankAddPage.vue'
+import QuestionAddPage from '@/pages/question/questionAddPage.vue'
+import ScoringResultAddPage from '@/pages/scoringResult/scoringResultAddPage.vue'
 
 export const routerList: Array<RouteRecordRaw> = [
   {
@@ -47,6 +50,44 @@ export const routerList: Array<RouteRecordRaw> = [
     props: true,
     meta: {
       access: roleEnums.PUBLIC,
+      hideInMenu: true
+    }
+  },
+  {
+    path: '/bank/add',
+    name: '创建题库',
+    component: BankAddPage,
+    meta: {
+      access: roleEnums.USER,
+      hideInMenu: false
+    }
+  }, {
+    path: '/bank/add/:bankId',
+    name: '修改题库',
+    component: BankAddPage,
+    props: true,
+    meta: {
+      access: roleEnums.USER,
+      hideInMenu: true
+    }
+  },
+  {
+    path: '/question/add/:bankId',
+    name: '创建题目',
+    component: QuestionAddPage,
+    props: true,
+    meta: {
+      access: roleEnums.USER,
+      hideInMenu: true
+    }
+  },
+  {
+    path: '/scoring_result/add/:bankId',
+    name: '添加评分结果',
+    component: ScoringResultAddPage,
+    props: true,
+    meta: {
+      access: roleEnums.USER,
       hideInMenu: true
     }
   },

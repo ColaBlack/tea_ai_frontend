@@ -26,9 +26,21 @@
             更新时间：{{ dayjs(bank.updateTime).format('YYYY-MM-DD HH:mm:ss') }}
           </div>
           <a-space style="margin-top: 16px;">
-            <a-button type="primary" @click="router.push('/bank/bank-detail/' + bank.id + '/question')">开始答题
+            <a-button type="primary" @click="router.push('/bank/bank-detail/' + bank.id + '/question')">
+              开始答题
             </a-button>
-            <a-button type="secondary" @click="router.go(-1)">回到上一页</a-button>
+            <a-button type="outline" @click="router.push('/')">
+              返回题库列表
+            </a-button>
+            <a-button v-if="canEdit" type="secondary" @click="router.push('/question/add/' + bank.id)">
+              设置题目内容
+            </a-button>
+            <a-button v-if="canEdit" type="secondary" @click="router.push('/scoring_result/add/' + bank.id)">
+              设置评分结果
+            </a-button>
+            <a-button v-if="canEdit" type="secondary" @click="router.push('/bank/add/' + bank.id)">
+              修改题库信息
+            </a-button>
           </a-space>
         </a-col>
         <a-col :span="6">
@@ -41,12 +53,14 @@
 
 <script setup lang="ts">
 
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { getQuestionBankVoByIdUsingGet } from '@/api/questionBankController'
 import { Message } from '@arco-design/web-vue'
 import { useRouter } from 'vue-router'
 import { BANK_TYPE, SCORING_STRATEGY } from '@/enums/bankEnums'
 import { dayjs } from '@arco-design/web-vue/es/_utils/date'
+import { useUserStore } from '@/store/user'
+import roleEnums from '@/access/roleEnums'
 
 interface Props {
   bankId: number
@@ -77,6 +91,13 @@ const getData = async () => {
 }
 onMounted(() => {
   getData()
+})
+
+const userStore = useUserStore()
+
+const canEdit = computed(() => {
+  // 只有题库创建者或者管理员可以编辑题库信息
+  return userStore.loginUser.id === bank.value.userId || userStore.loginUser.userRole === roleEnums.ADMIN
 })
 </script>
 

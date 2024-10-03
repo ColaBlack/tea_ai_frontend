@@ -11,7 +11,7 @@ import questionPage from '@/pages/admin/questionPage.vue'
 import scoringResultPage from '@/pages/admin/scoringResultPage.vue'
 import NotFoundPage from '@/pages/common/notFoundPage.vue'
 
-const routerList: Array<RouteRecordRaw> = [
+export const routerList: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: '欢迎',

@@ -12,7 +12,13 @@
       </a-col>
       <a-col flex="64px">
         <div v-if="userStore.loginUser.id">
-          {{ userStore.loginUser.userName ?? '无昵称' }}
+          <a-dropdown v-if="userStore.loginUser.id">
+            <a-avatar :image-url="userStore.loginUser.userAvatar"
+                      auto-fix-font-size class="avatar" />
+            <template #content>
+              <a-doption @click="logout">注销</a-doption>
+            </template>
+          </a-dropdown>
         </div>
         <a-button v-else type="primary" href="/user/login">登录</a-button>
       </a-col>
@@ -22,9 +28,12 @@
 
 <script setup lang="ts">
 import { type RouteRecordRaw, useRouter } from 'vue-router'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useUserStore } from '@/store/user'
 import CheckAccess from '@/access/checkAccess'
+import { Message } from '@arco-design/web-vue'
+import { userLogoutUsingPost } from '@/api/userController'
+import roleEnums from '@/access/roleEnums'
 
 const userStore = useUserStore()
 
@@ -41,15 +50,31 @@ const handleClick = (key: string) => {
   router.push({ path: key })
 }
 
-const visibleRoutes = ref<RouteRecordRaw[]>([])
+const routerList = ref<RouteRecordRaw[]>([])
 
 onMounted(async () => {
-  const routerList = await import('../../router/routerList')
-  visibleRoutes.value = routerList.default.filter((item: RouteRecordRaw) => {
+  const importedRouterList = await import('../../router/routerList')
+  routerList.value = importedRouterList.default
+})
+
+// 计算属性，基于 routerList 计算可见路由
+const visibleRoutes = computed(() => {
+  return routerList.value.filter((item: RouteRecordRaw) => {
     // 只显示有权限的没隐藏的菜单
     return item.meta?.hideInMenu !== true && CheckAccess(userStore.loginUser, item.meta?.access as string)
   })
 })
+
+const logout = async () => {
+  const res = await userLogoutUsingPost()
+  if (res.data.code === 200) {
+    userStore.setLoginUser({ userName: '未登录', userRole: roleEnums.PUBLIC })
+    Message.success('注销成功')
+    await router.push('/user/login')
+  } else {
+    Message.error('注销失败')
+  }
+}
 </script>
 
 <style scoped>
@@ -66,5 +91,9 @@ onMounted(async () => {
   color: #000000;
   text-align: center;
   font-family: '楷体', 'Times New Roman', sans-serif;
+}
+
+#header .avatar {
+  cursor: pointer;
 }
 </style>

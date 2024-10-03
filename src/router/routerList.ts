@@ -10,6 +10,7 @@ import bankPage from '@/pages/admin/bankPage.vue'
 import questionPage from '@/pages/admin/questionPage.vue'
 import scoringResultPage from '@/pages/admin/scoringResultPage.vue'
 import NotFoundPage from '@/pages/common/notFoundPage.vue'
+import bankDetailPage from '@/pages/bank/bankDetailPage.vue'
 
 export const routerList: Array<RouteRecordRaw> = [
   {
@@ -34,6 +35,16 @@ export const routerList: Array<RouteRecordRaw> = [
     path: '/user/register',
     name: '注册',
     component: RegisterPage,
+    meta: {
+      access: roleEnums.PUBLIC,
+      hideInMenu: true
+    }
+  },
+  {
+    path: '/bank/detail/:bankId',
+    name: '题库详情',
+    component: bankDetailPage,
+    props: true,
     meta: {
       access: roleEnums.PUBLIC,
       hideInMenu: true

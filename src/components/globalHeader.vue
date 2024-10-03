@@ -4,7 +4,7 @@
       <a-col flex="auto">
         <a-menu mode="horizontal" :selected-keys="selectedKeys" @menu-item-click="handleClick">
           <a-menu-item key="0" :style="{ padding: 0, marginRight: '38px' }" disabled>
-            <img src="../../assets/logo.png" alt="logo" class="logo" />
+            <img src="../assets/logo.png" alt="logo" class="logo" />
             <p class="title">茶AI</p>
           </a-menu-item>
           <a-menu-item v-for="item in visibleRoutes" :key="item.path">{{ item.name }}</a-menu-item>
@@ -53,7 +53,7 @@ const handleClick = (key: string) => {
 const routerList = ref<RouteRecordRaw[]>([])
 
 onMounted(async () => {
-  const importedRouterList = await import('../../router/routerList')
+  const importedRouterList = await import('../router/routerList')
   routerList.value = importedRouterList.default
 })
 

@@ -9,14 +9,14 @@
       <a-form-item field="bankType" label="题库类型" :rules="[{ required: true, message: '题库类型是必填项' }]"
                    validate-trigger="blur">
         <a-select v-model="form.bankType" placeholder="请选择题库类型" allow-clear>
-          <a-option v-for="(value, key) of BANK_TYPE" :value="key" :key="key" :label="value"></a-option>
+          <a-option v-for="(value, key) of BANK_TYPE" :value="Number(key)" :key="key" :label="value"></a-option>
         </a-select>
       </a-form-item>
       <a-form-item field="scoringStrategy" label="题库评分策略"
                    :rules="[{ required: true, message: '题库评分策略是必填项' }]"
                    validate-trigger="blur">
         <a-select v-model="form.scoringStrategy" placeholder="请选择题库评分策略" allow-clear>
-          <a-option v-for="(value, key) of SCORING_STRATEGY" :value="key" :key="key" :label="value"></a-option>
+          <a-option v-for="(value, key) of SCORING_STRATEGY" :value="Number(key)" :key="key" :label="value"></a-option>
         </a-select>
       </a-form-item>
       <a-form-item field="bankDesc" label="题库描述" :rules="[{ required: true, message: '题库描述是必填项' }]"

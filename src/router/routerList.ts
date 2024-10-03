@@ -14,6 +14,7 @@ import bankDetailPage from '@/pages/bank/bankDetailPage.vue'
 import BankAddPage from '@/pages/bank/bankAddPage.vue'
 import QuestionAddPage from '@/pages/question/questionAddPage.vue'
 import ScoringResultAddPage from '@/pages/scoringResult/scoringResultAddPage.vue'
+import BankUpdatePage from '@/pages/bank/bankUpdatePage.vue'
 
 export const routerList: Array<RouteRecordRaw> = [
   {
@@ -62,9 +63,9 @@ export const routerList: Array<RouteRecordRaw> = [
       hideInMenu: false
     }
   }, {
-    path: '/bank/add/:bankId',
+    path: '/bank/update/:bankId',
     name: '修改题库',
-    component: BankAddPage,
+    component: BankUpdatePage,
     props: true,
     meta: {
       access: roleEnums.USER,

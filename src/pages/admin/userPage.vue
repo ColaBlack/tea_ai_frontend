@@ -62,8 +62,8 @@
         </template>
         <div class="add-user-form">
           <a-form :model="addUserForm" label-width="80">
-            <a-form-item label="用户账号">
-              <a-input v-model="addUserForm.bankName" />
+            <a-form-item label="用户账号" :rules="[{ required: true, message: '用户账号是必填项' }]">
+              <a-input v-model="addUserForm.userAccount" />
               <template #extra>
                 <div>账号由字母、数字，长度在4-20位之间，必须唯一</div>
               </template>
@@ -80,11 +80,10 @@
                 <div>可为空，若为空则使用默认头像</div>
               </template>
             </a-form-item>
-            <a-form-item label="用户角色">
-              <a-input v-model="addUserForm.userRole" />
-              <template #extra>
-                <div>"admin"：超级管理员，"user"：普通用户,"ban"：封禁用户，三选一，默认为"user"</div>
-              </template>
+            <a-form-item label="用户角色" :rules="[{ required: true, message: '用户角色是必填项' }]">
+              <a-select v-model="addUserForm.userRole" placeholder="请选择用户角色" allow-clear>
+                <a-option v-for="(value, key) of USER_STATUS" :value="key" :key="key" :label="value"></a-option>
+              </a-select>
             </a-form-item>
 
           </a-form>
@@ -117,10 +116,9 @@
               </template>
             </a-form-item>
             <a-form-item label="用户角色">
-              <a-input v-model="editUserForm.userRole" />
-              <template #extra>
-                <div>"admin"：超级管理员，"user"：普通用户,"ban"：封禁用户，三选一，默认为"user"</div>
-              </template>
+              <a-select v-model="editUserForm.userRole" placeholder="请选择用户角色" allow-clear>
+                <a-option v-for="(value, key) of USER_STATUS" :value="key" :key="key" :label="value"></a-option>
+              </a-select>
             </a-form-item>
 
           </a-form>
@@ -142,6 +140,7 @@ import { Message, Modal } from '@arco-design/web-vue'
 import { dayjs } from '@arco-design/web-vue/es/_utils/date'
 import { IconDelete } from '@arco-design/web-vue/es/icon'
 import { USER_ROLE } from '@/access/roleEnums'
+import { USER_STATUS } from '@/enums/userEnums'
 
 const loading = ref(false)
 
@@ -189,15 +188,15 @@ const handlePageChange = (page: number) => {
 const editUserVisible = ref(false)
 
 const editUserClick = (record: API.User) => {
-  editUserForm.id = record.id
-  editUserForm.userAvatar = record.userAvatar
-  editUserForm.userName = record.userName
-  editUserForm.userProfile = record.userProfile
-  editUserForm.userRole = record.userRole
+  editUserForm.value.id = record.id
+  editUserForm.value.userAvatar = record.userAvatar
+  editUserForm.value.userName = record.userName
+  editUserForm.value.userProfile = record.userProfile
+  editUserForm.value.userRole = record.userRole
   editUserVisible.value = true
 }
 const editUserOk = async () => {
-  const res = await updateUserUsingPost(editUserForm)
+  const res = await updateUserUsingPost(editUserForm.value)
   if (res.data.code === 200) {
     Message.success('修改用户成功')
     await loadData()
@@ -210,7 +209,7 @@ const editUserCancel = () => {
   editUserVisible.value = false
 }
 
-let editUserForm: API.UserUpdateRequest = reactive({
+let editUserForm = ref<API.UserUpdateRequest>({
   id: -1,
   userAvatar: '',
   userName: '',

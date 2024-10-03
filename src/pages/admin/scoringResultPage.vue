@@ -170,17 +170,17 @@ const handlePageChange = (page: number) => {
 const editScoringResultVisible = ref(false)
 
 const editScoringResultClick = (record: API.ScoringResult) => {
-  editScoringResultForm.id = record.id
-  editScoringResultForm.resultDesc = record.resultDesc
-  editScoringResultForm.resultName = record.resultName
-  editScoringResultForm.resultPicture = record.resultPicture
-  editScoringResultForm.resultProp = record.resultProp
-  editScoringResultForm.resultScoreRange = record.resultScoreRange
-  editScoringResultForm.userid = record.userid
+  editScoringResultForm.value.id = record.id
+  editScoringResultForm.value.resultDesc = record.resultDesc
+  editScoringResultForm.value.resultName = record.resultName
+  editScoringResultForm.value.resultPicture = record.resultPicture
+  editScoringResultForm.value.resultProp = record.resultProp
+  editScoringResultForm.value.resultScoreRange = record.resultScoreRange
+  editScoringResultForm.value.userid = record.userid
   editScoringResultVisible.value = true
 }
 const editScoringResultOk = async () => {
-  const res = await updateScoringResultUsingPost(editScoringResultForm)
+  const res = await updateScoringResultUsingPost(editScoringResultForm.value)
   if (res.data.code === 200) {
     Message.success('修改评分结果成功')
     await loadData()
@@ -193,7 +193,7 @@ const editScoringResultCancel = () => {
   editScoringResultVisible.value = false
 }
 
-let editScoringResultForm: API.ScoringResultUpdateRequest = reactive({})
+let editScoringResultForm = ref<API.ScoringResultUpdateRequest>({})
 
 
 const addScoringResultVisible = ref(false)

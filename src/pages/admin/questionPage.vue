@@ -150,12 +150,12 @@ const handlePageChange = (page: number) => {
 const editQuestionVisible = ref(false)
 
 const editQuestionClick = (record: API.Question) => {
-  editQuestionForm.questionBankId = record.bankid
-  editQuestionForm.questionContent = JSON.parse(record.questionContent as string)
+  editQuestionForm.value.questionBankId = record.bankid
+  editQuestionForm.value.questionContent = JSON.parse(record.questionContent as string)
   editQuestionVisible.value = true
 }
 const editQuestionOk = async () => {
-  const res = await updateQuestionUsingPost(editQuestionForm)
+  const res = await updateQuestionUsingPost(editQuestionForm.value)
   if (res.data.code === 200) {
     Message.success('修改题目成功')
     await loadData()
@@ -168,7 +168,7 @@ const editQuestionCancel = () => {
   editQuestionVisible.value = false
 }
 
-let editQuestionForm: API.QuestionUpdateRequest = reactive({
+let editQuestionForm = ref<API.QuestionUpdateRequest>({
   questionContent: []
 })
 

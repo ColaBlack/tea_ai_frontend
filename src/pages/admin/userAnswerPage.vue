@@ -160,13 +160,13 @@ const handlePageChange = (page: number) => {
 const editUserAnswerVisible = ref(false)
 
 const editUserAnswerClick = (record: API.UserAnswer) => {
-  editUserAnswerForm.id = record.id
-  editUserAnswerForm.bankid = record.bankid
-  editUserAnswerForm.choices = record.choices
+  editUserAnswerForm.value.id = record.id
+  editUserAnswerForm.value.bankid = record.bankid
+  editUserAnswerForm.value.choices = record.choices
   editUserAnswerVisible.value = true
 }
 const editUserAnswerOk = async () => {
-  const res = await updateUserAnswerUsingPost(editUserAnswerForm)
+  const res = await updateUserAnswerUsingPost(editUserAnswerForm.value)
   if (res.data.code === 200) {
     Message.success('修改用户回答成功')
     await loadData()
@@ -179,7 +179,7 @@ const editUserAnswerCancel = () => {
   editUserAnswerVisible.value = false
 }
 
-let editUserAnswerForm: API.UserAnswerUpdateRequest = reactive({})
+let editUserAnswerForm = ref<API.UserAnswerUpdateRequest>({})
 
 
 const addUserAnswerVisible = ref(false)

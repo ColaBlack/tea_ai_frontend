@@ -38,7 +38,7 @@
             <a-button v-if="canEdit" type="secondary" @click="router.push('/scoring_result/add/' + bank.id)">
               设置评分结果
             </a-button>
-            <a-button v-if="canEdit" type="secondary" @click="router.push('/bank/add/' + bank.id)">
+            <a-button v-if="canEdit" type="secondary" @click="router.push('/bank/update/' + bank.id)">
               修改题库信息
             </a-button>
           </a-space>

@@ -40,7 +40,7 @@
       <template #action="{ record }">
         <a-button type="outline" @click="editQuestionClick(record)">编辑</a-button>
         <a-popconfirm content="你确定要删除该题目吗？" @ok="handleDelete(record)">
-          <a-button type="primary" style="margin-left: 10px;">
+          <a-button type="primary">
             <template #icon>
               <icon-delete />
             </template>
@@ -115,7 +115,7 @@ const columns = [
   { title: '创建人id', dataIndex: 'userid' },
   { title: '创建时间', dataIndex: 'createTime', slotName: 'createTime' },
   { title: '更新时间', dataIndex: 'updateTime', slotName: 'updateTime' },
-  { title: '操作', dataIndex: 'action', slotName: 'action' }
+  { title: '题目操作', dataIndex: 'action', slotName: 'action' }
 ]
 
 const searchParams = ref<API.QuestionQueryRequest>({

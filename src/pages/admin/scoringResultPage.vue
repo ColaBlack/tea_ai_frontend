@@ -1,7 +1,7 @@
 <!--suppress VueUnrecognizedSlot -->
 <template>
-  <div id="userPage">
-    <a-input-search class="search-input" placeholder="按名称搜索" search-button @search="handleSearch" allow-clear>
+  <div id="scoringResultPage">
+    <a-input-search class="search-input" placeholder="按结果名称搜索" search-button @search="handleSearch" allow-clear>
       <template #button-icon>
         <icon-search />
       </template>
@@ -9,11 +9,11 @@
         搜索
       </template>
     </a-input-search>
-    <a-button type="primary" @click="addUserClick" style="margin-bottom: 10px; margin-left: 20px;">
+    <a-button type="primary" @click="addScoringResultClick" style="margin-bottom: 10px; margin-left: 20px;">
       <template #icon>
         <icon-plus />
       </template>
-      <template #default>新增用户</template>
+      <template #default>新增评分结果</template>
     </a-button>
     <a-table
       :columns="columns"
@@ -31,11 +31,8 @@
       }"
       @page-change="handlePageChange"
     >
-      <template #userRole="{ record }">
-        {{ USER_ROLE[record.userRole] || '未知用户类型' }}
-      </template>
-      <template #userAvatar="{ record }">
-        <a-image width="64" :src="record.userAvatar" />
+      <template #resultPicture="{ record }">
+        <a-image width="64" :src="record.resultPicture" />
       </template>
       <template #createTime="{ record }">
         {{ dayjs(record.createTime).format('YYYY-MM-DD HH:mm:ss') }}
@@ -44,9 +41,9 @@
         {{ dayjs(record.updateTime).format('YYYY-MM-DD HH:mm:ss') }}
       </template>
       <template #action="{ record }">
-        <a-button type="outline" @click="editUserClick(record)">编辑</a-button>
-        <a-popconfirm content="你确定要删除该用户吗？" @ok="handleDelete(record)">
-          <a-button type="primary" style="margin-left: 10px;">
+        <a-button type="outline" @click="editScoringResultClick(record)">编辑</a-button>
+        <a-popconfirm content="你确定要删除该评分结果吗？" @ok="handleDelete(record)">
+          <a-button type="primary">
             <template #icon>
               <icon-delete />
             </template>
@@ -55,74 +52,59 @@
         </a-popconfirm>
       </template>
     </a-table>
-    <div id="addUser">
-      <a-drawer :width="500" :visible="addUserVisible" @ok="addUserOk" @cancel="addUserCancel" unmountOnClose>
+    <div id="addScoringResult">
+      <a-drawer :width="500" :visible="addScoringResultVisible" @ok="addScoringResultOk"
+                @cancel="addScoringResultCancel" unmountOnClose>
         <template #title>
-          新增用户
+          新增评分结果
         </template>
-        <div class="add-user-form">
-          <a-form :model="addUserForm" label-width="80">
-            <a-form-item label="用户账号">
-              <a-input v-model="addUserForm.bankName" />
-              <template #extra>
-                <div>账号由字母、数字，长度在4-20位之间，必须唯一</div>
-              </template>
+        <div class="add-scoringResult-form">
+          <a-form :model="addScoringResultForm" label-width="80">
+            <a-form-item label="题库id">
+              <a-input v-model="addScoringResultForm.bankid" />
             </a-form-item>
-            <a-form-item label="用户昵称">
-              <a-input v-model="addUserForm.userName" />
-              <template #extra>
-                <div>昵称可为空，若为空则显示无昵称，可不唯一</div>
-              </template>
+            <a-form-item label="结果描述">
+              <a-input v-model="addScoringResultForm.resultDesc" />
             </a-form-item>
-            <a-form-item label="用户头像">
-              <a-input v-model="addUserForm.userAvatar" />
-              <template #extra>
-                <div>可为空，若为空则使用默认头像</div>
-              </template>
+            <a-form-item label="结果名称">
+              <a-input v-model="addScoringResultForm.resultName" />
             </a-form-item>
-            <a-form-item label="用户角色">
-              <a-input v-model="addUserForm.userRole" />
-              <template #extra>
-                <div>"admin"：超级管理员，"user"：普通用户,"ban"：封禁用户，三选一，默认为"user"</div>
-              </template>
+            <a-form-item label="结果图片">
+              <a-input v-model="addScoringResultForm.resultPicture" />
             </a-form-item>
-
+            <a-form-item label="结果属性">
+              <a-input v-model="addScoringResultForm.resultProp" />
+            </a-form-item>
+            <a-form-item label="得分结果范围">
+              <a-input v-model="addScoringResultForm.resultScoreRange" />
+            </a-form-item>
           </a-form>
         </div>
       </a-drawer>
     </div>
-    <div id="editUser">
-      <a-drawer :width="500" :visible="editUserVisible" @ok="editUserOk" @cancel="editUserCancel" unmountOnClose>
+    <div id="editScoringResult">
+      <a-drawer :width="500" :visible="editScoringResultVisible" @ok="editScoringResultOk"
+                @cancel="editScoringResultCancel" unmountOnClose>
         <template #title>
-          编辑用户
+          编辑评分结果
         </template>
-        <div class="add-user-form">
-          <a-form :model="editUserForm" label-width="80">
-            <a-form-item label="用户昵称">
-              <a-input v-model="editUserForm.userName" />
-              <template #extra>
-                <div>昵称可为空，若为空则显示无昵称，可不唯一</div>
-              </template>
+        <div class="add-scoringResult-form">
+          <a-form :model="editScoringResultForm" label-width="80">
+            <a-form-item label="结果描述">
+              <a-input v-model="editScoringResultForm.resultDesc" />
             </a-form-item>
-            <a-form-item label="用户简介">
-              <a-input v-model="editUserForm.userProfile" />
-              <template #extra>
-                <div>用户简介可为空</div>
-              </template>
+            <a-form-item label="结果名称">
+              <a-input v-model="editScoringResultForm.resultName" />
             </a-form-item>
-            <a-form-item label="用户头像">
-              <a-input v-model="editUserForm.userAvatar" />
-              <template #extra>
-                <div>可为空，若为空则使用默认头像</div>
-              </template>
+            <a-form-item label="结果图片">
+              <a-input v-model="editScoringResultForm.resultPicture" />
             </a-form-item>
-            <a-form-item label="用户角色">
-              <a-input v-model="editUserForm.userRole" />
-              <template #extra>
-                <div>"admin"：超级管理员，"user"：普通用户,"ban"：封禁用户，三选一，默认为"user"</div>
-              </template>
+            <a-form-item label="结果属性">
+              <a-input v-model="editScoringResultForm.resultProp" />
             </a-form-item>
-
+            <a-form-item label="得分结果范围">
+              <a-input v-model="editScoringResultForm.resultScoreRange" />
+            </a-form-item>
           </a-form>
         </div>
       </a-drawer>
@@ -133,41 +115,40 @@
 <script setup lang="ts">
 import { reactive, ref, watchEffect } from 'vue'
 import {
-  addUserUsingPost,
-  deleteUserUsingPost,
-  listUserByPageUsingPost,
-  updateUserUsingPost
-} from '@/api/userController'
+  addScoringResultUsingPost,
+  deleteScoringResultUsingPost,
+  listScoringResultByPageUsingPost,
+  updateScoringResultUsingPost
+} from '@/api/scoringResultController'
 import { Message, Modal } from '@arco-design/web-vue'
 import { dayjs } from '@arco-design/web-vue/es/_utils/date'
 import { IconDelete } from '@arco-design/web-vue/es/icon'
-import { USER_ROLE } from '@/access/roleEnums'
 
 const loading = ref(false)
 
-const columns = [
-  { title: '用户ID', dataIndex: 'id' },
-  { title: '用户账号', dataIndex: 'userAccount' },
-  { title: '用户昵称', dataIndex: 'userName' },
-  { title: '用户头像', dataIndex: 'userAvatar', slotName: 'userAvatar' },
-  { title: '用户简介', dataIndex: 'userProfile' },
-  { title: '用户角色', dataIndex: 'userRole', slotName: 'userRole' },
+const columns = [{ title: 'id', dataIndex: 'id' },
+  { title: '结果id', dataIndex: 'id' },
+  { title: '题库id', dataIndex: 'bankid' },
+  { title: '结果描述', dataIndex: 'resultDesc' },
+  { title: '结果名称', dataIndex: 'resultName' },
+  { title: '结果图片', dataIndex: 'resultPicture', slotName: 'resultPicture' },
+  { title: '结果属性', dataIndex: 'resultProp' },
+  { title: '得分结果范围', dataIndex: 'resultScoreRange' },
   { title: '创建时间', dataIndex: 'createTime', slotName: 'createTime' },
   { title: '更新时间', dataIndex: 'updateTime', slotName: 'updateTime' },
-  { title: '用户操作', dataIndex: 'action', slotName: 'action' }
+  { title: '结果操作', dataIndex: 'action', slotName: 'action' }
 ]
-
-const searchParams = ref<API.UserQueryRequest>({
+const searchParams = ref<API.ScoringResultQueryRequest>({
   current: 1,
   pageSize: 10
 })
 
-const data = ref<API.User[]>([])
+const data = ref<API.ScoringResult[]>([])
 const total = ref<number>(0)
 
 const loadData = async () => {
   loading.value = true
-  const res = await listUserByPageUsingPost(searchParams.value)
+  const res = await listScoringResultByPageUsingPost(searchParams.value)
   if (res.data.code === 200) {
     data.value = res.data.data?.records || []
     total.value = res.data.data?.total || 0
@@ -186,72 +167,63 @@ const handlePageChange = (page: number) => {
   searchParams.value = { ...searchParams.value, current: page }
 }
 
-const editUserVisible = ref(false)
+const editScoringResultVisible = ref(false)
 
-const editUserClick = (record: API.User) => {
-  editUserForm.id = record.id
-  editUserForm.userAvatar = record.userAvatar
-  editUserForm.userName = record.userName
-  editUserForm.userProfile = record.userProfile
-  editUserForm.userRole = record.userRole
-  editUserVisible.value = true
+const editScoringResultClick = (record: API.ScoringResult) => {
+  editScoringResultForm.id = record.id
+  editScoringResultForm.resultDesc = record.resultDesc
+  editScoringResultForm.resultName = record.resultName
+  editScoringResultForm.resultPicture = record.resultPicture
+  editScoringResultForm.resultProp = record.resultProp
+  editScoringResultForm.resultScoreRange = record.resultScoreRange
+  editScoringResultForm.userid = record.userid
+  editScoringResultVisible.value = true
 }
-const editUserOk = async () => {
-  const res = await updateUserUsingPost(editUserForm)
+const editScoringResultOk = async () => {
+  const res = await updateScoringResultUsingPost(editScoringResultForm)
   if (res.data.code === 200) {
-    Message.success('修改用户成功')
+    Message.success('修改评分结果成功')
     await loadData()
-    editUserVisible.value = false
+    editScoringResultVisible.value = false
   } else {
-    Message.error('修改用户失败:' + res.data.message)
+    Message.error('修改评分结果失败:' + res.data.message)
   }
 }
-const editUserCancel = () => {
-  editUserVisible.value = false
+const editScoringResultCancel = () => {
+  editScoringResultVisible.value = false
 }
 
-let editUserForm: API.UserUpdateRequest = reactive({
-  id: -1,
-  userAvatar: '',
-  userName: '',
-  userProfile: '',
-  userRole: ''
-})
+let editScoringResultForm: API.ScoringResultUpdateRequest = reactive({})
 
 
-const addUserVisible = ref(false)
+const addScoringResultVisible = ref(false)
 
-const addUserClick = () => {
-  addUserVisible.value = true
+const addScoringResultClick = () => {
+  addScoringResultVisible.value = true
 }
-const addUserOk = async () => {
-  const res = await addUserUsingPost(addUserForm)
+const addScoringResultOk = async () => {
+  const res = await addScoringResultUsingPost(addScoringResultForm)
   if (res.data.code === 200) {
-    Message.success('新增用户成功')
+    Message.success('新增评分结果成功')
     await loadData()
-    addUserVisible.value = false
+    addScoringResultVisible.value = false
   } else {
-    Message.error('新增用户失败:' + res.data.message)
+    Message.error('新增评分结果失败:' + res.data.message)
   }
 }
-const addUserCancel = () => {
-  addUserVisible.value = false
+const addScoringResultCancel = () => {
+  addScoringResultVisible.value = false
 }
 
-const addUserForm: API.UserAddRequest = reactive({
-  bankName: '',
-  userName: '',
-  userAvatar: '',
-  userRole: ''
-})
+const addScoringResultForm: API.ScoringResultAddRequest = reactive({})
 
-const handleDelete = async (record: API.User) => {
+const handleDelete = async (record: API.ScoringResult) => {
   // 在删除之前显示确认框
   Modal.confirm({
     title: '确认删除',
-    content: '确定要删除该用户吗？这将无法恢复。',
+    content: '确定要删除该评分结果吗？这将无法恢复。',
     onOk: async () => {
-      const res = await deleteUserUsingPost({ id: record.id })
+      const res = await deleteScoringResultUsingPost({ id: record.id })
       if (res.data.code === 200) {
         Message.success('删除成功')
         await loadData()
@@ -266,13 +238,13 @@ const handleDelete = async (record: API.User) => {
 }
 
 const handleSearch = (value: string) => {
-  searchParams.value = { ...searchParams.value, userName: value }
+  searchParams.value = { ...searchParams.value, resultName: value }
 }
 
 </script>
 
 <style scoped>
-#userPage .search-input {
+#scoringResultPage .search-input {
   width: 320px;
   margin-bottom: 10px;
 }

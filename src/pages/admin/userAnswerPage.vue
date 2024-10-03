@@ -49,7 +49,7 @@
       <template #action="{ record }">
         <a-button type="outline" @click="editUserAnswerClick(record)">编辑</a-button>
         <a-popconfirm content="你确定要删除该用户回答吗？" @ok="handleDelete(record)">
-          <a-button type="primary" style="margin-left: 10px;">
+          <a-button type="primary">
             <template #icon>
               <icon-delete />
             </template>
@@ -126,7 +126,7 @@ const columns = [
   { title: '用户回答id', dataIndex: 'userid' },
   { title: '创建时间', dataIndex: 'createTime', slotName: 'createTime' },
   { title: '更新时间', dataIndex: 'updateTime', slotName: 'updateTime' },
-  { title: '用户回答回答操作', dataIndex: 'action', slotName: 'action' }
+  { title: '用户回答操作', dataIndex: 'action', slotName: 'action' }
 ]
 const searchParams = ref<API.UserAnswerQueryRequest>({
   current: 1,

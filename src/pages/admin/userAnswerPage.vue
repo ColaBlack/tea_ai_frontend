@@ -1,7 +1,7 @@
 <!--suppress VueUnrecognizedSlot -->
 <template>
-  <div id="userPage">
-    <a-input-search class="search-input" placeholder="按名称搜索" search-button @search="handleSearch" allow-clear>
+  <div id="userAnswerPage">
+    <a-input-search class="search-input" placeholder="按描述搜索" search-button @search="handleSearch" allow-clear>
       <template #button-icon>
         <icon-search />
       </template>
@@ -9,11 +9,11 @@
         搜索
       </template>
     </a-input-search>
-    <a-button type="primary" @click="addUserClick" style="margin-bottom: 10px; margin-left: 20px;">
+    <a-button type="primary" @click="addUserAnswerClick" style="margin-bottom: 10px; margin-left: 20px;">
       <template #icon>
         <icon-plus />
       </template>
-      <template #default>新增用户</template>
+      <template #default>新增用户回答</template>
     </a-button>
     <a-table
       :columns="columns"
@@ -21,7 +21,7 @@
       :bordered="true"
       :hoverable="true"
       :stripe="true"
-      :loading="form.loading"
+      :loading="loading"
       :show-header="true"
       :pagination="{
         showTotal:true,
@@ -31,8 +31,14 @@
       }"
       @page-change="handlePageChange"
     >
-      <template #userAvatar="{ record }">
-        <a-image width="64" :src="record.userAvatar" />
+      <template #resultPicture="{ record }">
+        <a-image width="64" :src="record.resultPicture" />
+      </template>
+      <template #bankType="{ record }">
+        {{ BANK_TYPE[record.bankType as 0 | 1] || '未知题库类型' }}
+      </template>
+      <template #scoringStrategy="{ record }">
+        {{ SCORING_STRATEGY[record.scoringStrategy as 0 | 1] || '未知评分策略' }}
       </template>
       <template #createTime="{ record }">
         {{ dayjs(record.createTime).format('YYYY-MM-DD HH:mm:ss') }}
@@ -41,8 +47,8 @@
         {{ dayjs(record.updateTime).format('YYYY-MM-DD HH:mm:ss') }}
       </template>
       <template #action="{ record }">
-        <a-button type="outline" @click="editUserClick(record)">编辑</a-button>
-        <a-popconfirm content="你确定要删除该用户吗？" @ok="handleDelete(record)">
+        <a-button type="outline" @click="editUserAnswerClick(record)">编辑</a-button>
+        <a-popconfirm content="你确定要删除该用户回答吗？" @ok="handleDelete(record)">
           <a-button type="primary" style="margin-left: 10px;">
             <template #icon>
               <icon-delete />
@@ -52,74 +58,38 @@
         </a-popconfirm>
       </template>
     </a-table>
-    <div id="addUser">
-      <a-drawer :width="500" :visible="addUserVisible" @ok="addUserOk" @cancel="addUserCancel" unmountOnClose>
+    <div id="addUserAnswer">
+      <a-drawer :width="500" :visible="addUserAnswerVisible" @ok="addUserAnswerOk" @cancel="addUserAnswerCancel"
+                unmountOnClose>
         <template #title>
-          新增用户
+          新增用户回答
         </template>
-        <div class="add-user-form">
-          <a-form :model="addUserForm" label-width="80">
-            <a-form-item label="用户账号">
-              <a-input v-model="addUserForm.bankName" />
-              <template #extra>
-                <div>账号由字母、数字，长度在4-20位之间，必须唯一</div>
-              </template>
+        <div class="add-userAnswer-form">
+          <a-form :model="addUserAnswerForm" label-width="80">
+            <a-form-item label="题库id">
+              <a-input v-model="addUserAnswerForm.bankid" />
             </a-form-item>
-            <a-form-item label="用户昵称">
-              <a-input v-model="addUserForm.userName" />
-              <template #extra>
-                <div>昵称可为空，若为空则显示无昵称，可不唯一</div>
-              </template>
+            <a-form-item label="用户选项">
+              <a-input v-model="addUserAnswerForm.choices" />
             </a-form-item>
-            <a-form-item label="用户头像">
-              <a-input v-model="addUserForm.userAvatar" />
-              <template #extra>
-                <div>可为空，若为空则使用默认头像</div>
-              </template>
-            </a-form-item>
-            <a-form-item label="用户角色">
-              <a-input v-model="addUserForm.userRole" />
-              <template #extra>
-                <div>"admin"：超级管理员，"user"：普通用户,"ban"：封禁用户，三选一，默认为"user"</div>
-              </template>
-            </a-form-item>
-
           </a-form>
         </div>
       </a-drawer>
     </div>
-    <div id="editUser">
-      <a-drawer :width="500" :visible="editUserVisible" @ok="editUserOk" @cancel="editUserCancel" unmountOnClose>
+    <div id="editUserAnswer">
+      <a-drawer :width="500" :visible="editUserAnswerVisible" @ok="editUserAnswerOk" @cancel="editUserAnswerCancel"
+                unmountOnClose>
         <template #title>
-          编辑用户
+          编辑用户回答
         </template>
-        <div class="add-user-form">
-          <a-form :model="editUserForm" label-width="80">
-            <a-form-item label="用户昵称">
-              <a-input v-model="editUserForm.userName" />
-              <template #extra>
-                <div>昵称可为空，若为空则显示无昵称，可不唯一</div>
-              </template>
+        <div class="add-userAnswer-form">
+          <a-form :model="editUserAnswerForm" label-width="80">
+            <a-form-item label="题库id">
+              <a-input v-model="editUserAnswerForm.bankid" />
             </a-form-item>
-            <a-form-item label="用户简介">
-              <a-input v-model="editUserForm.userProfile" />
-              <template #extra>
-                <div>用户简介可为空</div>
-              </template>
+            <a-form-item label="用户选项">
+              <a-input v-model="editUserAnswerForm.choices" />
             </a-form-item>
-            <a-form-item label="用户头像">
-              <a-input v-model="editUserForm.userAvatar" />
-              <template #extra>
-                <div>可为空，若为空则使用默认头像</div>
-              </template>
-            </a-form-item>
-            <a-form-item label="用户角色">
-              <a-input v-model="editUserForm.userRole" />
-              <template #extra>
-                <div>"admin"：超级管理员，"user"：普通用户,"ban"：封禁用户，三选一，默认为"user"</div>
-              </template>
-            </a-form-item>
-
           </a-form>
         </div>
       </a-drawer>
@@ -130,54 +100,52 @@
 <script setup lang="ts">
 import { reactive, ref, watchEffect } from 'vue'
 import {
-  addUserUsingPost,
-  deleteUserUsingPost,
-  listUserByPageUsingPost,
-  updateUserUsingPost
-} from '@/api/userController'
+  addUserAnswerUsingPost,
+  deleteUserAnswerUsingPost,
+  listUserAnswerByPageUsingPost,
+  updateUserAnswerUsingPost
+} from '@/api/userAnswerController'
 import { Message, Modal } from '@arco-design/web-vue'
 import { dayjs } from '@arco-design/web-vue/es/_utils/date'
 import { IconDelete } from '@arco-design/web-vue/es/icon'
+import { BANK_TYPE, SCORING_STRATEGY } from '@/enums/bankEnums'
 
-const form = reactive({
-  border: true,
-  borderCell: false,
-  hover: true,
-  stripe: false,
-  checkbox: true,
-  loading: false,
-  tableHeader: true,
-  noData: false
-})
+const loading = ref(false)
 
 const columns = [
-  { title: '用户ID', dataIndex: 'id' },
-  { title: '用户账号', dataIndex: 'userAccount' },
-  { title: '用户昵称', dataIndex: 'userName' },
-  { title: '用户头像', dataIndex: 'userAvatar', slotName: 'userAvatar' },
-  { title: '用户简介', dataIndex: 'userProfile' },
-  { title: '用户角色', dataIndex: 'userRole' },
+  { title: 'id', dataIndex: 'id' },
+  { title: '名称', dataIndex: 'resultName' },
+  { title: '描述', dataIndex: 'resultDesc' },
+  { title: '图片', dataIndex: 'resultPicture', slotName: 'resultPicture' },
+  { title: '用户回答选项', dataIndex: 'choices' },
+  { title: '结果id', dataIndex: 'resultid' },
+  { title: '评分范围', dataIndex: 'resultScore' },
+  { title: '题库id', dataIndex: 'bankid' },
+  { title: '题库类型', dataIndex: 'banktype', slotName: 'bankType' },
+  { title: '评分策略', dataIndex: 'scoringStrategy', slotName: 'scoringStrategy' },
+  { title: '用户回答id', dataIndex: 'userid' },
   { title: '创建时间', dataIndex: 'createTime', slotName: 'createTime' },
   { title: '更新时间', dataIndex: 'updateTime', slotName: 'updateTime' },
-  { title: '用户操作', dataIndex: 'action', slotName: 'action' }
+  { title: '用户回答回答操作', dataIndex: 'action', slotName: 'action' }
 ]
-
-const searchParams = ref<API.UserQueryRequest>({
+const searchParams = ref<API.UserAnswerQueryRequest>({
   current: 1,
   pageSize: 10
 })
 
-const data = ref<API.User[]>([])
+const data = ref<API.UserAnswer[]>([])
 const total = ref<number>(0)
 
 const loadData = async () => {
-  const res = await listUserByPageUsingPost(searchParams.value)
+  loading.value = true
+  const res = await listUserAnswerByPageUsingPost(searchParams.value)
   if (res.data.code === 200) {
     data.value = res.data.data?.records || []
     total.value = res.data.data?.total || 0
   } else {
     Message.error(res.data.message || '数据加载失败')
   }
+  loading.value = false
 }
 
 // 监听搜索条件变化，重新加载数据
@@ -189,72 +157,59 @@ const handlePageChange = (page: number) => {
   searchParams.value = { ...searchParams.value, current: page }
 }
 
-const editUserVisible = ref(false)
+const editUserAnswerVisible = ref(false)
 
-const editUserClick = (record: API.User) => {
-  editUserForm.id = record.id
-  editUserForm.userAvatar = record.userAvatar
-  editUserForm.userName = record.userName
-  editUserForm.userProfile = record.userProfile
-  editUserForm.userRole = record.userRole
-  editUserVisible.value = true
+const editUserAnswerClick = (record: API.UserAnswer) => {
+  editUserAnswerForm.id = record.id
+  editUserAnswerForm.bankid = record.bankid
+  editUserAnswerForm.choices = record.choices
+  editUserAnswerVisible.value = true
 }
-const editUserOk = async () => {
-  const res = await updateUserUsingPost(editUserForm)
+const editUserAnswerOk = async () => {
+  const res = await updateUserAnswerUsingPost(editUserAnswerForm)
   if (res.data.code === 200) {
-    Message.success('修改用户成功')
+    Message.success('修改用户回答成功')
     await loadData()
-    editUserVisible.value = false
+    editUserAnswerVisible.value = false
   } else {
-    Message.error('修改用户失败:' + res.data.message)
+    Message.error('修改用户回答失败:' + res.data.message)
   }
 }
-const editUserCancel = () => {
-  editUserVisible.value = false
+const editUserAnswerCancel = () => {
+  editUserAnswerVisible.value = false
 }
 
-let editUserForm: API.UserUpdateRequest = reactive({
-  id: -1,
-  userAvatar: '',
-  userName: '',
-  userProfile: '',
-  userRole: ''
-})
+let editUserAnswerForm: API.UserAnswerUpdateRequest = reactive({})
 
 
-const addUserVisible = ref(false)
+const addUserAnswerVisible = ref(false)
 
-const addUserClick = () => {
-  addUserVisible.value = true
+const addUserAnswerClick = () => {
+  addUserAnswerVisible.value = true
 }
-const addUserOk = async () => {
-  const res = await addUserUsingPost(addUserForm)
+const addUserAnswerOk = async () => {
+  const res = await addUserAnswerUsingPost(addUserAnswerForm)
   if (res.data.code === 200) {
-    Message.success('新增用户成功')
+    Message.success('新增用户回答成功')
     await loadData()
-    addUserVisible.value = false
+    addUserAnswerVisible.value = false
   } else {
-    Message.error('新增用户失败:' + res.data.message)
+    Message.error('新增用户回答失败:' + res.data.message)
   }
 }
-const addUserCancel = () => {
-  addUserVisible.value = false
+const addUserAnswerCancel = () => {
+  addUserAnswerVisible.value = false
 }
 
-const addUserForm: API.UserAddRequest = reactive({
-  bankName: '',
-  userName: '',
-  userAvatar: '',
-  userRole: ''
-})
+const addUserAnswerForm: API.UserAnswerAddRequest = reactive({})
 
-const handleDelete = async (record: API.User) => {
+const handleDelete = async (record: API.UserAnswer) => {
   // 在删除之前显示确认框
   Modal.confirm({
     title: '确认删除',
-    content: '确定要删除该用户吗？这将无法恢复。',
+    content: '确定要删除该用户回答吗？这将无法恢复。',
     onOk: async () => {
-      const res = await deleteUserUsingPost({ id: record.id })
+      const res = await deleteUserAnswerUsingPost({ id: record.id })
       if (res.data.code === 200) {
         Message.success('删除成功')
         await loadData()
@@ -269,13 +224,13 @@ const handleDelete = async (record: API.User) => {
 }
 
 const handleSearch = (value: string) => {
-  searchParams.value = { ...searchParams.value, userName: value }
+  searchParams.value = { ...searchParams.value, resultDesc: value }
 }
 
 </script>
 
 <style scoped>
-#userPage .search-input {
+#userAnswerPage .search-input {
   width: 320px;
   margin-bottom: 10px;
 }

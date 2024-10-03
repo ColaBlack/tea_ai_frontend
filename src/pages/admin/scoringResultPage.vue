@@ -21,7 +21,7 @@
       :bordered="true"
       :hoverable="true"
       :stripe="true"
-      :loading="form.loading"
+      :loading="loading"
       :show-header="true"
       :pagination="{
         showTotal:true,
@@ -31,6 +31,9 @@
       }"
       @page-change="handlePageChange"
     >
+      <template #userRole="{ record }">
+        {{ USER_ROLE[record.userRole] || '未知用户类型' }}
+      </template>
       <template #userAvatar="{ record }">
         <a-image width="64" :src="record.userAvatar" />
       </template>
@@ -138,17 +141,9 @@ import {
 import { Message, Modal } from '@arco-design/web-vue'
 import { dayjs } from '@arco-design/web-vue/es/_utils/date'
 import { IconDelete } from '@arco-design/web-vue/es/icon'
+import { USER_ROLE } from '@/access/roleEnums'
 
-const form = reactive({
-  border: true,
-  borderCell: false,
-  hover: true,
-  stripe: false,
-  checkbox: true,
-  loading: false,
-  tableHeader: true,
-  noData: false
-})
+const loading = ref(false)
 
 const columns = [
   { title: '用户ID', dataIndex: 'id' },
@@ -156,7 +151,7 @@ const columns = [
   { title: '用户昵称', dataIndex: 'userName' },
   { title: '用户头像', dataIndex: 'userAvatar', slotName: 'userAvatar' },
   { title: '用户简介', dataIndex: 'userProfile' },
-  { title: '用户角色', dataIndex: 'userRole' },
+  { title: '用户角色', dataIndex: 'userRole', slotName: 'userRole' },
   { title: '创建时间', dataIndex: 'createTime', slotName: 'createTime' },
   { title: '更新时间', dataIndex: 'updateTime', slotName: 'updateTime' },
   { title: '用户操作', dataIndex: 'action', slotName: 'action' }
@@ -171,6 +166,7 @@ const data = ref<API.User[]>([])
 const total = ref<number>(0)
 
 const loadData = async () => {
+  loading.value = true
   const res = await listUserByPageUsingPost(searchParams.value)
   if (res.data.code === 200) {
     data.value = res.data.data?.records || []
@@ -178,6 +174,7 @@ const loadData = async () => {
   } else {
     Message.error(res.data.message || '数据加载失败')
   }
+  loading.value = false
 }
 
 // 监听搜索条件变化，重新加载数据

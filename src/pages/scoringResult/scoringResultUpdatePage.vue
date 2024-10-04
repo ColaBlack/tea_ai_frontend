@@ -60,9 +60,6 @@
         </template>
         <div class="add-scoringResult-form">
           <a-form :model="addScoringResultForm" label-width="80">
-            <a-form-item label="题库id">
-              <a-input-number v-model="addScoringResultForm.bankid" />
-            </a-form-item>
             <a-form-item label="结果描述">
               <a-input v-model="addScoringResultForm.resultDesc" />
             </a-form-item>
@@ -202,7 +199,7 @@ const editScoringResultClick = (record: API.ScoringResult) => {
   editScoringResultForm.value.resultDesc = record.resultDesc
   editScoringResultForm.value.resultName = record.resultName || ''
   editScoringResultForm.value.resultPicture = record.resultPicture
-  editScoringResultForm.value.resultProp = JSON.parse(record.resultProp || '[]')
+  editScoringResultForm.value.resultProp = JSON.parse(JSON.stringify(record.resultProp) || '[]')
   editScoringResultForm.value.resultScoreRange = record.resultScoreRange
   editScoringResultVisible.value = true
 }
@@ -242,7 +239,7 @@ const addScoringResultCancel = () => {
   addScoringResultVisible.value = false
 }
 
-const addScoringResultForm: API.ScoringResultAddRequest = reactive({})
+const addScoringResultForm: API.ScoringResultAddRequest = reactive({ bankid: props.bankId })
 
 const handleDelete = async (record: API.ScoringResult) => {
   // 在删除之前显示确认框

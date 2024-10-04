@@ -451,7 +451,7 @@ declare namespace API {
     resultDesc?: string
     resultName?: string
     resultPicture?: string
-    resultProp?: string
+    resultProp?: string[]
     resultScoreRange?: number
   }
 
@@ -460,7 +460,7 @@ declare namespace API {
     resultDesc?: string
     resultName?: string
     resultPicture?: string
-    resultProp?: string
+    resultProp?: string[]
     resultScoreRange?: number
   }
 
@@ -484,7 +484,7 @@ declare namespace API {
     resultDesc?: string
     resultName?: string
     resultPicture?: string
-    resultProp?: string
+    resultProp?: string[]
     resultScoreRange?: number
     userid?: number
   }

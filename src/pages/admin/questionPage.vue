@@ -58,7 +58,7 @@
         <div class="add-question-form">
           <a-form :model="addQuestionForm" label-width="80">
             <a-form-item label="所属题库ID">
-              <a-input v-model="addQuestionForm.questionBankId" />
+              <a-input-number v-model="addQuestionForm.questionBankId" />
             </a-form-item>
             <a-form :model="addQuestionContent" class="question-form" auto-label-width>
               <a-space direction="vertical" fill>

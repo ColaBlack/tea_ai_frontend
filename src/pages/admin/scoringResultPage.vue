@@ -61,7 +61,7 @@
         <div class="add-scoringResult-form">
           <a-form :model="addScoringResultForm" label-width="80">
             <a-form-item label="题库id">
-              <a-input v-model="addScoringResultForm.bankid" />
+              <a-input-number v-model="addScoringResultForm.bankid" />
             </a-form-item>
             <a-form-item label="结果描述">
               <a-input v-model="addScoringResultForm.resultDesc" />
@@ -73,10 +73,18 @@
               <a-input v-model="addScoringResultForm.resultPicture" />
             </a-form-item>
             <a-form-item label="结果属性">
-              <a-input v-model="addScoringResultForm.resultProp" />
+              <a-input-tag
+                v-model="addScoringResultForm.resultProp"
+                placeholder="输入结果集，按回车键添加"
+                allow-clear
+              />
             </a-form-item>
             <a-form-item label="得分结果范围">
-              <a-input v-model="addScoringResultForm.resultScoreRange" />
+              <a-input-number
+                v-model="addScoringResultForm.resultScoreRange"
+                placeholder="请输入结果得分范围"
+                allow-clear
+              />
             </a-form-item>
           </a-form>
         </div>
@@ -100,10 +108,18 @@
               <a-input v-model="editScoringResultForm.resultPicture" />
             </a-form-item>
             <a-form-item label="结果属性">
-              <a-input v-model="editScoringResultForm.resultProp" />
+              <a-input-tag
+                v-model="editScoringResultForm.resultProp"
+                placeholder="输入结果集，按回车键添加"
+                allow-clear
+              />
             </a-form-item>
             <a-form-item label="得分结果范围">
-              <a-input v-model="editScoringResultForm.resultScoreRange" />
+              <a-input-number
+                v-model="editScoringResultForm.resultScoreRange"
+                placeholder="请输入结果得分范围"
+                allow-clear
+              />
             </a-form-item>
           </a-form>
         </div>
@@ -174,7 +190,7 @@ const editScoringResultClick = (record: API.ScoringResult) => {
   editScoringResultForm.value.resultDesc = record.resultDesc
   editScoringResultForm.value.resultName = record.resultName
   editScoringResultForm.value.resultPicture = record.resultPicture
-  editScoringResultForm.value.resultProp = record.resultProp
+  editScoringResultForm.value.resultProp = JSON.parse(record.resultProp || '[]')
   editScoringResultForm.value.resultScoreRange = record.resultScoreRange
   editScoringResultForm.value.userid = record.userid
   editScoringResultVisible.value = true

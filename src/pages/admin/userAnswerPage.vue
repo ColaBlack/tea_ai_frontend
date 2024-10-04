@@ -67,7 +67,7 @@
         <div class="add-userAnswer-form">
           <a-form :model="addUserAnswerForm" label-width="80">
             <a-form-item label="题库id">
-              <a-input v-model="addUserAnswerForm.bankid" />
+              <a-input-number v-model="addUserAnswerForm.bankid" />
             </a-form-item>
             <a-form-item label="用户选项">
               <a-input v-model="addUserAnswerForm.choices" />
@@ -85,7 +85,7 @@
         <div class="add-userAnswer-form">
           <a-form :model="editUserAnswerForm" label-width="80">
             <a-form-item label="题库id">
-              <a-input v-model="editUserAnswerForm.bankid" />
+              <a-input-number v-model="editUserAnswerForm.bankid" />
             </a-form-item>
             <a-form-item label="用户选项">
               <a-input v-model="editUserAnswerForm.choices" />

@@ -1,7 +1,7 @@
 <template>
   <div id="bank-update-page">
     <h1>修改题库</h1>
-    <a-form :model="form" class="login-form" auto-label-width>
+    <a-form :model="form" class="bank-form" auto-label-width>
       <a-form-item field="bankName" label="题库名称" :rules="[{ required: true, message: '题目名称是必填项' }]"
                    validate-trigger="blur">
         <a-input allow-clear v-model="form.bankName" placeholder="请输入题库名称" @press-enter="handleSubmit" />
@@ -82,6 +82,7 @@ const fetchBank = async () => {
     form.value.bankIcon = res.data.data?.bankIcon
     creator.value = res.data.data?.userId || -1
   } else if (res.data.code === 40400) {
+    Message.error('获取题库信息失败:' + res.data.message)
     // 访问的题库不存在则跳转到“404NotFound”页面
     await router.push('/404')
   } else {
@@ -95,7 +96,7 @@ let creator = ref(-1)
 
 const canEdit = computed(() => {
   // 只有题库创建者或者管理员可以编辑题库信息
-  return userStore.loginUser.id === form.value.id || userStore.loginUser.userRole === roleEnums.ADMIN
+  return userStore.loginUser.id === creator.value || userStore.loginUser.userRole === roleEnums.ADMIN
 })
 
 onMounted(() => {
@@ -117,7 +118,7 @@ onMounted(() => {
   max-width: 400px;
 }
 
-#bank-update-page .cancel-btn{
+#bank-update-page .cancel-btn {
   margin-left: 10px;
 }
 </style>

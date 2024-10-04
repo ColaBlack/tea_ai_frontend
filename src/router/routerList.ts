@@ -12,9 +12,9 @@ import scoringResultPage from '@/pages/admin/scoringResultPage.vue'
 import NotFoundPage from '@/pages/common/notFoundPage.vue'
 import bankDetailPage from '@/pages/bank/bankDetailPage.vue'
 import BankAddPage from '@/pages/bank/bankAddPage.vue'
-import QuestionAddPage from '@/pages/question/questionAddPage.vue'
-import ScoringResultAddPage from '@/pages/scoringResult/scoringResultAddPage.vue'
 import BankUpdatePage from '@/pages/bank/bankUpdatePage.vue'
+import questionEditPage from '@/pages/question/questionUpdatePage.vue'
+import scoringResultEditPage from '@/pages/scoringResult/scoringResultUpdatePage.vue'
 
 export const routerList: Array<RouteRecordRaw> = [
   {
@@ -62,7 +62,8 @@ export const routerList: Array<RouteRecordRaw> = [
       access: roleEnums.USER,
       hideInMenu: false
     }
-  }, {
+  },
+  {
     path: '/bank/update/:bankId',
     name: '修改题库',
     component: BankUpdatePage,
@@ -73,9 +74,9 @@ export const routerList: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: '/question/add/:bankId',
-    name: '创建题目',
-    component: QuestionAddPage,
+    path: '/question/update/:bankId',
+    name: '修改题目',
+    component: questionEditPage,
     props: true,
     meta: {
       access: roleEnums.USER,
@@ -83,9 +84,9 @@ export const routerList: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: '/scoring_result/add/:bankId',
-    name: '添加评分结果',
-    component: ScoringResultAddPage,
+    path: '/scoring_result/update/:bankId',
+    name: '修改评分结果',
+    component: scoringResultEditPage,
     props: true,
     meta: {
       access: roleEnums.USER,

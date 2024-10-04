@@ -32,10 +32,10 @@
             <a-button type="outline" @click="router.push('/')">
               返回题库列表
             </a-button>
-            <a-button v-if="canEdit" type="secondary" @click="router.push('/question/add/' + bank.id)">
+            <a-button v-if="canEdit" type="secondary" @click="router.push('/question/update/' + bank.id)">
               设置题目内容
             </a-button>
-            <a-button v-if="canEdit" type="secondary" @click="router.push('/scoring_result/add/' + bank.id)">
+            <a-button v-if="canEdit" type="secondary" @click="router.push('/scoring_result/update/' + bank.id)">
               设置评分结果
             </a-button>
             <a-button v-if="canEdit" type="secondary" @click="router.push('/bank/update/' + bank.id)">

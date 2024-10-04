@@ -34,6 +34,10 @@
       <template #resultPicture="{ record }">
         <a-image width="64" :src="record.resultPicture" />
       </template>
+      <template #resultProp="{ record }">
+        <a-tag v-for="(tag, index) in JSON.parse(record.resultProp)" :key="index" style="margin-right: 4px;">{{ tag }}
+        </a-tag>
+      </template>
       <template #createTime="{ record }">
         {{ dayjs(record.createTime).format('YYYY-MM-DD HH:mm:ss') }}
       </template>
@@ -148,7 +152,7 @@ const columns = [{ title: 'id', dataIndex: 'id' },
   { title: '结果描述', dataIndex: 'resultDesc' },
   { title: '结果名称', dataIndex: 'resultName' },
   { title: '结果图片', dataIndex: 'resultPicture', slotName: 'resultPicture' },
-  { title: '结果属性', dataIndex: 'resultProp' },
+  { title: '结果属性', dataIndex: 'resultProp', slotName: 'resultProp' },
   { title: '得分结果范围', dataIndex: 'resultScoreRange' },
   { title: '创建时间', dataIndex: 'createTime', slotName: 'createTime' },
   { title: '更新时间', dataIndex: 'updateTime', slotName: 'updateTime' },

@@ -577,7 +577,7 @@ declare namespace API {
 
   type UserAnswerUpdateRequest = {
     bankid?: number
-    choices?: string
+    choices?: string[]
     id?: number
   }
 

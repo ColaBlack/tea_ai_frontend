@@ -40,6 +40,10 @@
       <template #scoringStrategy="{ record }">
         {{ SCORING_STRATEGY[record.scoringStrategy as 0 | 1] || '未知评分策略' }}
       </template>
+      <template #choices="{ record }">
+        <a-tag v-for="(tag, index) in JSON.parse(record.choices)" :key="index" style="margin-right: 4px;">{{ tag }}
+        </a-tag>
+      </template>
       <template #createTime="{ record }">
         {{ dayjs(record.createTime).format('YYYY-MM-DD HH:mm:ss') }}
       </template>
@@ -70,7 +74,11 @@
               <a-input-number v-model="addUserAnswerForm.bankid" />
             </a-form-item>
             <a-form-item label="用户选项">
-              <a-input v-model="addUserAnswerForm.choices" />
+              <a-input-tag
+                v-model="addUserAnswerForm.choices"
+                placeholder="输入结果集，按回车键添加"
+                allow-clear
+              />
             </a-form-item>
           </a-form>
         </div>
@@ -88,7 +96,11 @@
               <a-input-number v-model="editUserAnswerForm.bankid" />
             </a-form-item>
             <a-form-item label="用户选项">
-              <a-input v-model="editUserAnswerForm.choices" />
+              <a-input-tag
+                v-model="editUserAnswerForm.choices"
+                placeholder="输入结果集，按回车键添加"
+                allow-clear
+              />
             </a-form-item>
           </a-form>
         </div>
@@ -117,7 +129,7 @@ const columns = [
   { title: '名称', dataIndex: 'resultName' },
   { title: '描述', dataIndex: 'resultDesc' },
   { title: '图片', dataIndex: 'resultPicture', slotName: 'resultPicture' },
-  { title: '用户回答选项', dataIndex: 'choices' },
+  { title: '用户回答选项', dataIndex: 'choices', slotName: 'choices' },
   { title: '结果id', dataIndex: 'resultid' },
   { title: '评分范围', dataIndex: 'resultScore' },
   { title: '题库id', dataIndex: 'bankid' },
@@ -162,7 +174,7 @@ const editUserAnswerVisible = ref(false)
 const editUserAnswerClick = (record: API.UserAnswer) => {
   editUserAnswerForm.value.id = record.id
   editUserAnswerForm.value.bankid = record.bankid
-  editUserAnswerForm.value.choices = record.choices
+  editUserAnswerForm.value.choices = JSON.parse(record.choices || '[]')
   editUserAnswerVisible.value = true
 }
 const editUserAnswerOk = async () => {

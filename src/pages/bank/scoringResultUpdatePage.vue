@@ -1,6 +1,6 @@
 <!--suppress VueUnrecognizedSlot -->
 <template>
-  <div id="scoringResultPage">
+  <div id="scoringResultUpdatePage">
     <a-input-search class="search-input" placeholder="按结果名称搜索" search-button @search="handleSearch" allow-clear>
       <template #button-icon>
         <icon-search />
@@ -15,6 +15,7 @@
       </template>
       <template #default>新增评分结果</template>
     </a-button>
+    <a-button status="danger" type="primary" @click="router.go(-1)" style="margin-left: 20px;">返回上一页</a-button>
     <a-table
       :columns="columns"
       :data="data"
@@ -297,7 +298,7 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-#scoringResultPage .search-input {
+#scoringResultUpdatePage .search-input {
   width: 320px;
   margin-bottom: 10px;
 }

@@ -26,7 +26,7 @@
             更新时间：{{ dayjs(bank.updateTime).format('YYYY-MM-DD HH:mm:ss') }}
           </div>
           <a-space style="margin-top: 16px;">
-            <a-button type="primary" @click="router.push('/bank/bank-detail/' + bank.id + '/question')">
+            <a-button type="primary" @click="router.push('/answer/do/' + bank.id )">
               开始答题
             </a-button>
             <a-button type="outline" @click="router.push('/')">

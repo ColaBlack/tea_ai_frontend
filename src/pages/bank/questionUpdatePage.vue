@@ -86,7 +86,7 @@ const handleSubmit = async () => {
     Message.error('题目创建失败:' + res.data.message)
   }
 }
-const fetchBank = async () => {
+const loadData = async () => {
   // 获取题库作者信息用于判断是否可以编辑题目信息
   // 获取题库信息
   const bank = await getQuestionBankVoByIdUsingGet({ id: props.bankId })
@@ -131,7 +131,7 @@ const canEdit = computed(() => {
 })
 
 onMounted(() => {
-  fetchBank()
+  loadData()
   if (!canEdit.value) {
     Message.error('你没有权限编辑该题目信息')
     router.push('/403')

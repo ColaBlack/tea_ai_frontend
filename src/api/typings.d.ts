@@ -546,7 +546,7 @@ declare namespace API {
 
   type UserAnswerAddRequest = {
     bankid?: number
-    choices?: string
+    choices?: string[]
     id?: number
   }
 
@@ -582,8 +582,8 @@ declare namespace API {
   }
 
   type UserAnswerVO = {
-    appId?: number
-    appType?: number
+    bankId?: number
+    bankType?: number
     choices?: string[]
     createTime?: string
     id?: number

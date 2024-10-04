@@ -1,5 +1,5 @@
 <template>
-  <div id="bank-add-page">
+  <div id="bank-update-page">
     <h1>创建题库</h1>
     <a-form :model="form" class="login-form" auto-label-width>
       <a-form-item field="bankName" label="题库名称" :rules="[{ required: true, message: '题目名称是必填项' }]"
@@ -62,7 +62,7 @@ const handleSubmit = async () => {
 </script>
 
 <style scoped>
-#bank-add-page {
+#bank-update-page {
   display: flex;
   flex-direction: column;
   align-items: center;

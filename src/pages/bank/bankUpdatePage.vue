@@ -1,5 +1,5 @@
 <template>
-  <div id="bank-add-page">
+  <div id="bank-update-page">
     <h1>修改题库</h1>
     <a-form :model="form" class="login-form" auto-label-width>
       <a-form-item field="bankName" label="题库名称" :rules="[{ required: true, message: '题目名称是必填项' }]"
@@ -28,7 +28,10 @@
         <a-input allow-clear v-model="form.bankIcon" placeholder="输入题库图标的url" @press-enter="handleSubmit" />
       </a-form-item>
       <a-form-item>
-        <a-button class="register-btn" type="primary" @click="handleSubmit">提交</a-button>
+        <a-space>
+          <a-button class="submit-btn" type="primary" @click="handleSubmit">提交</a-button>
+          <a-button class="cancel-btn" type="outline" @click="router.go(-1)">取消</a-button>
+        </a-space>
       </a-form-item>
     </a-form>
   </div>
@@ -105,12 +108,16 @@ onMounted(() => {
 </script>
 
 <style scoped>
-#bank-add-page {
+#bank-update-page {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   margin: 0 auto;
   max-width: 400px;
+}
+
+#bank-update-page .cancel-btn{
+  margin-left: 10px;
 }
 </style>

@@ -42,7 +42,7 @@ import roleEnums from '@/access/roleEnums'
 import { computed, onMounted, ref } from 'vue'
 import { addQuestionBankUsingPost, getQuestionBankVoByIdUsingGet } from '@/api/questionBankController'
 import { Message } from '@arco-design/web-vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { BANK_TYPE, SCORING_STRATEGY } from '@/enums/bankEnums'
 import { useUserStore } from '@/store/user'
 
@@ -69,7 +69,7 @@ const handleSubmit = async () => {
     Message.error('题库创建失败:' + res.data.message)
   }
 }
-useRoute()
+
 const fetchBank = async () => {
   // 获取题库信息
   const res = await getQuestionBankVoByIdUsingGet(form.value)

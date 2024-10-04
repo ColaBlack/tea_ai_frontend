@@ -56,7 +56,7 @@
 import roleEnums from '@/access/roleEnums'
 import { computed, onMounted, ref } from 'vue'
 import { Message } from '@arco-design/web-vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/user'
 import { addQuestionUsingPost, listQuestionVoByPageUsingPost } from '@/api/questionController'
 import { getQuestionBankVoByIdUsingGet } from '@/api/questionBankController'
@@ -86,7 +86,6 @@ const handleSubmit = async () => {
     Message.error('题目创建失败:' + res.data.message)
   }
 }
-useRoute()
 const fetchBank = async () => {
   // 获取题库作者信息用于判断是否可以编辑题目信息
   // 获取题库信息

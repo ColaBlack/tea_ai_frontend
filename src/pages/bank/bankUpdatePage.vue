@@ -40,7 +40,7 @@
 <script setup lang="ts">
 import roleEnums from '@/access/roleEnums'
 import { computed, onMounted, ref } from 'vue'
-import { addQuestionBankUsingPost, getQuestionBankVoByIdUsingGet } from '@/api/questionBankController'
+import { editQuestionBankUsingPost, getQuestionBankVoByIdUsingGet } from '@/api/questionBankController'
 import { Message } from '@arco-design/web-vue'
 import { useRouter } from 'vue-router'
 import { BANK_TYPE, SCORING_STRATEGY } from '@/enums/bankEnums'
@@ -58,15 +58,15 @@ const form = ref<API.QuestionBankAddRequest>({ id: props.bankId })
 const router = useRouter()
 
 const handleSubmit = async () => {
-  const res = await addQuestionBankUsingPost(form.value)
+  const res = await editQuestionBankUsingPost(form.value)
   if (res.data.code === 200) {
-    Message.success('题库创建成功，即将跳转到题库详情页面')
+    Message.success('题库修改成功，请等待管理员审核')
     setTimeout(() => {
       // 1s后跳转到题库详情页面
-      router.push('/bank/detail/' + res.data.data)
+      router.push('/')
     }, 500)
   } else {
-    Message.error('题库创建失败:' + res.data.message)
+    Message.error('题库修改l失败:' + res.data.message)
   }
 }
 

@@ -5,7 +5,6 @@
         <a-col flex="auto" class="contentWrapper">
           <h2>{{ data.resultName }}</h2>
           <p>结果描述：{{ data.resultDesc }}</p>
-          <p>结果 id：{{ data.resultId }}</p>
           <p>结果得分：{{ data.resultScore }}</p>
           <p>我的答案：{{ data.choices }}</p>
           <p>题库类型：{{ BANK_TYPE[data.bankType as 0 | 1] || '未知题库类型' }}</p>
@@ -57,13 +56,12 @@ const loadData = async () => {
   const res = await getUserAnswerVoByIdUsingGet({
     id: props.id
   })
-  if (res.data.code === 0 && res.data.data) {
+  if (res.data.code === 200 && res.data.data) {
     data.value = res.data.data
   } else if (res.data.code === 40400) {
     message.error('获取结果失败，结果不存在')
     await router.push('/404')
-  }
-  {
+  } else {
     message.error('获取结果失败，' + res.data.message)
   }
 }

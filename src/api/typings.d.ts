@@ -411,7 +411,7 @@ declare namespace API {
   }
 
   type QuestionUpdateRequest = {
-    questionBankId?: number
+    id?: number
     questionContent?: QuestionContentDTO[]
   }
 

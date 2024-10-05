@@ -134,6 +134,10 @@ const loadData = async () => {
   const bank = await getQuestionBankVoByIdUsingGet({ id: props.bankId })
   if (bank.data.code === 200) {
     creator.value = bank.data.data?.userId || -1
+    if (!canEdit.value) {
+      Message.error('你没有权限编辑该题目信息')
+      router.push('/403')
+    }
   } else if (bank.data.code === 40400) {
     Message.error('获取题库信息失败:' + bank.data.message)
     // 访问的题库不存在则跳转到“404NotFound”页面
@@ -174,10 +178,6 @@ const canEdit = computed(() => {
 
 onMounted(() => {
   loadData()
-  if (!canEdit.value) {
-    Message.error('你没有权限编辑该题目信息')
-    router.push('/403')
-  }
 })
 
 const addQuestion = (index: number) => {

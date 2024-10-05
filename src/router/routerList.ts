@@ -46,7 +46,8 @@ export const routerList: Array<RouteRecordRaw> = [
       access: roleEnums.PUBLIC,
       hideInMenu: true
     }
-  }, {
+  },
+  {
     path: '/answer/do/:bankId',
     name: '答题页面',
     component: answerPage,
@@ -55,7 +56,8 @@ export const routerList: Array<RouteRecordRaw> = [
       access: roleEnums.USER,
       hideInMenu: true
     }
-  }, {
+  },
+  {
     path: '/answer/result/:id',
     name: '答题结果',
     component: answerResultPage,
@@ -76,178 +78,114 @@ export const routerList: Array<RouteRecordRaw> = [
   },
   {
     path: '/bank/detail/:bankId',
-    name:
-      '题库详情',
-    component:
-    bankDetailPage,
-    props:
-      true,
-    meta:
-      {
-        access: roleEnums.PUBLIC,
-        hideInMenu:
-          true
-      }
-  }
-  ,
-  {
+    name: '题库详情',
+    component: bankDetailPage,
+    props: true,
+    meta: {
+      access: roleEnums.PUBLIC,
+      hideInMenu: true
+    }
+  }, {
     path: '/bank/add',
-    name:
-      '创建题库',
-    component:
-    BankAddPage,
-    meta:
-      {
-        access: roleEnums.USER,
-        hideInMenu:
-          false
-      }
-  }
-  ,
+    name: '创建题库',
+    component: BankAddPage,
+    meta: {
+      access: roleEnums.USER,
+      hideInMenu: false
+    }
+  },
   {
     path: '/bank/update/:bankId',
-    name:
-      '修改题库',
-    component:
-    BankUpdatePage,
-    props:
-      true,
-    meta:
-      {
-        access: roleEnums.USER,
-        hideInMenu:
-          true
-      }
-  }
-  ,
+    name: '修改题库',
+    component: BankUpdatePage,
+    props: true,
+    meta: {
+      access: roleEnums.USER,
+      hideInMenu: true
+    }
+  },
   {
     path: '/question/update/:bankId',
-    name:
-      '修改题目',
-    component:
-    questionEditPage,
-    props:
-      true,
-    meta:
-      {
-        access: roleEnums.USER,
-        hideInMenu:
-          true
-      }
-  }
-  ,
+    name: '修改题目',
+    component: questionEditPage,
+    props: true,
+    meta: {
+      access: roleEnums.USER,
+      hideInMenu: true
+    }
+  },
   {
     path: '/scoring_result/update/:bankId',
-    name:
-      '修改评分结果',
-    component:
-    scoringResultEditPage,
-    props:
-      true,
-    meta:
-      {
-        access: roleEnums.USER,
-        hideInMenu:
-          true
-      }
-  }
-  ,
+    name: '修改评分结果',
+    component: scoringResultEditPage,
+    props: true,
+    meta: {
+      access: roleEnums.USER,
+      hideInMenu: true
+    }
+  },
   {
     path: '/403',
-    name:
-      '无权限',
-    component:
-    NoAuthPage,
-    meta:
-      {
-        access: roleEnums.PUBLIC,
-        hideInMenu:
-          true
-      }
-  }
-  ,
+    name: '无权限',
+    component: NoAuthPage,
+    meta: {
+      access: roleEnums.PUBLIC,
+      hideInMenu: true
+    }
+  },
   {
     path: '/admin/user',
-    name:
-      '用户管理',
-    component:
-    UserPage,
-    meta:
-      {
-        access: roleEnums.ADMIN,
-        hideInMenu:
-          false
-      }
-  }
-  ,
+    name: '用户管理',
+    component: UserPage,
+    meta: {
+      access: roleEnums.ADMIN,
+      hideInMenu: false
+    }
+  },
   {
     path: '/admin/bank',
-    name:
-      '题库管理',
-    component:
-    bankPage,
-    meta:
-      {
-        access: roleEnums.ADMIN,
-        hideInMenu:
-          false
-      }
-  }
-  ,
+    name: '题库管理',
+    component: bankPage,
+    meta: {
+      access: roleEnums.ADMIN,
+      hideInMenu: false
+    }
+  },
   {
     path: '/admin/question',
-    name:
-      '题目管理',
-    component:
-    questionPage,
-    meta:
-      {
-        access: roleEnums.ADMIN,
-        hideInMenu:
-          false
-      }
-  }
-  ,
+    name: '题目管理',
+    component: questionPage,
+    meta: {
+      access: roleEnums.ADMIN,
+      hideInMenu: false
+    }
+  },
   {
     path: '/admin/scoring_result',
-    name:
-      '评分管理',
-    component:
-    scoringResultPage,
-    meta:
-      {
-        access: roleEnums.ADMIN,
-        hideInMenu:
-          false
-      }
-  }
-  ,
+    name: '评分管理',
+    component: scoringResultPage,
+    meta: {
+      access: roleEnums.ADMIN,
+      hideInMenu: false
+    }
+  },
   {
     path: '/admin/user_answer',
-    name:
-      '回答管理',
-    component:
-    userAnswerPage,
-    meta:
-      {
-        access: roleEnums.ADMIN,
-        hideInMenu:
-          false
-      }
-  }
-  ,
+    name: '回答管理',
+    component: userAnswerPage,
+    meta: {
+      access: roleEnums.ADMIN,
+      hideInMenu: false
+    }
+  },
   {
     path: '/:pathMatch(.*)*',
-    name:
-      'NotFound',
-    component:
-    NotFoundPage,
-    meta:
-      {
-        access: roleEnums.PUBLIC,
-        hideInMenu:
-          true
-      }
+    name: 'NotFound',
+    component: NotFoundPage,
+    meta: {
+      access: roleEnums.PUBLIC,
+      hideInMenu: true
+    }
   }
 ]
 export default routerList

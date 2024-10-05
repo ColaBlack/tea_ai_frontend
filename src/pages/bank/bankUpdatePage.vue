@@ -81,6 +81,10 @@ const fetchBank = async () => {
     form.value.bankDesc = res.data.data?.bankDesc
     form.value.bankIcon = res.data.data?.bankIcon
     creator.value = res.data.data?.userId || -1
+    if (!canEdit.value) {
+      Message.error('你没有权限编辑该题库信息')
+      router.push('/403')
+    }
   } else if (res.data.code === 40400) {
     Message.error('获取题库信息失败:' + res.data.message)
     // 访问的题库不存在则跳转到“404NotFound”页面
@@ -101,10 +105,6 @@ const canEdit = computed(() => {
 
 onMounted(() => {
   fetchBank()
-  if (!canEdit.value) {
-    Message.error('你没有权限编辑该题库信息')
-    router.push('/403')
-  }
 })
 </script>
 

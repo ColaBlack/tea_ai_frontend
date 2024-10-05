@@ -1,15 +1,23 @@
 <!--suppress VueUnrecognizedSlot -->
 <template>
   <div id="questionPage">
-    <a-input-search class="search-input" placeholder="按内容搜索" search-button @search="handleSearch" allow-clear>
+    <a-input-search
+      class="search-input"
+      placeholder="按内容搜索"
+      search-button
+      @search="handleSearch"
+      allow-clear
+    >
       <template #button-icon>
         <icon-search />
       </template>
-      <template #button-default>
-        搜索
-      </template>
+      <template #button-default> 搜索 </template>
     </a-input-search>
-    <a-button type="primary" @click="addQuestionClick" style="margin-bottom: 10px; margin-left: 20px;">
+    <a-button
+      type="primary"
+      @click="addQuestionClick"
+      style="margin-bottom: 10px; margin-left: 20px"
+    >
       <template #icon>
         <icon-plus />
       </template>
@@ -24,10 +32,10 @@
       :loading="loading"
       :show-header="true"
       :pagination="{
-        showTotal:true,
-        pageSize:searchParams.pageSize,
-        current:searchParams.current,
-        total:total
+        showTotal: true,
+        pageSize: searchParams.pageSize,
+        current: searchParams.current,
+        total: total
       }"
       @page-change="handlePageChange"
     >
@@ -50,11 +58,14 @@
       </template>
     </a-table>
     <div id="addQuestion">
-      <a-drawer :width="500" :visible="addQuestionVisible" @ok="addQuestionOk" @cancel="addQuestionCancel"
-                unmountOnClose>
-        <template #title>
-          新增题目
-        </template>
+      <a-drawer
+        :width="500"
+        :visible="addQuestionVisible"
+        @ok="addQuestionOk"
+        @cancel="addQuestionCancel"
+        unmountOnClose
+      >
+        <template #title> 新增题目 </template>
         <div class="add-question-form">
           <a-form :model="addQuestionForm" label-width="80">
             <a-form-item label="所属题库ID">
@@ -69,8 +80,11 @@
                   </a-form-item>
                   <a-form-item field="content" :label="`题目${index + 1}选项`">
                     <a-space direction="vertical" fill>
-                      <a-form-item v-for="(option, optionIndex) in question.options" :key="optionIndex"
-                                   :label="`选项${optionIndex + 1}`">
+                      <a-form-item
+                        v-for="(option, optionIndex) in question.options"
+                        :key="optionIndex"
+                        :label="`选项${optionIndex + 1}`"
+                      >
                         <a-space direction="vertical" fill>
                           <a-form-item :label="`选项内容`">
                             <a-input v-model="option.key" placeholder="请输入选项内容" />
@@ -79,10 +93,14 @@
                             <a-input v-model="option.value" placeholder="请输入选项值" />
                           </a-form-item>
                           <a-space>
-                            <a-button @click="addOption(question,optionIndex+1)" type="primary">增加选项
+                            <a-button @click="addOption(question, optionIndex + 1)" type="primary"
+                              >增加选项
                             </a-button>
-                            <a-button @click="deleteOption(question,optionIndex)" status="danger"
-                                      :style="{marginLeft:'10px'}">删除选项
+                            <a-button
+                              @click="deleteOption(question, optionIndex)"
+                              status="danger"
+                              :style="{ marginLeft: '10px' }"
+                              >删除选项
                             </a-button>
                           </a-space>
                         </a-space>
@@ -90,18 +108,25 @@
                     </a-space>
                   </a-form-item>
                   <a-space>
-                    <a-button @click="addOption(question,question.options?.length||0)" type="primary">底部增加选项
+                    <a-button
+                      @click="addOption(question, question.options?.length || 0)"
+                      type="primary"
+                      >底部增加选项
                     </a-button>
-                    <a-button @click="addQuestion(index+1)" type="primary">增加题目
-                    </a-button>
-                    <a-button @click="deleteQuestion(index)" status="danger" :style="{marginLeft:'10px'}">删除题目
+                    <a-button @click="addQuestion(index + 1)" type="primary">增加题目 </a-button>
+                    <a-button
+                      @click="deleteQuestion(index)"
+                      status="danger"
+                      :style="{ marginLeft: '10px' }"
+                      >删除题目
                     </a-button>
                   </a-space>
                 </div>
               </a-space>
               <a-form-item>
-                <a-space :style="{marginTop:'20px'}">
-                  <a-button @click="addQuestion(addQuestionContent.length)" type="primary">底部增加题目
+                <a-space :style="{ marginTop: '20px' }">
+                  <a-button @click="addQuestion(addQuestionContent.length)" type="primary"
+                    >底部增加题目
                   </a-button>
                 </a-space>
               </a-form-item>
@@ -111,11 +136,14 @@
       </a-drawer>
     </div>
     <div id="editQuestion">
-      <a-drawer :width="500" :visible="editQuestionVisible" @ok="editQuestionOk" @cancel="editQuestionCancel"
-                unmountOnClose>
-        <template #title>
-          编辑题目
-        </template>
+      <a-drawer
+        :width="500"
+        :visible="editQuestionVisible"
+        @ok="editQuestionOk"
+        @cancel="editQuestionCancel"
+        unmountOnClose
+      >
+        <template #title> 编辑题目 </template>
         <div class="add-question-form">
           <a-form :model="editQuestionContent" class="question-form" auto-label-width>
             <a-space direction="vertical" fill>
@@ -126,8 +154,11 @@
                 </a-form-item>
                 <a-form-item field="content" :label="`题目${index + 1}选项`">
                   <a-space direction="vertical" fill>
-                    <a-form-item v-for="(option, optionIndex) in question.options" :key="optionIndex"
-                                 :label="`选项${optionIndex + 1}`">
+                    <a-form-item
+                      v-for="(option, optionIndex) in question.options"
+                      :key="optionIndex"
+                      :label="`选项${optionIndex + 1}`"
+                    >
                       <a-space direction="vertical" fill>
                         <a-form-item :label="`选项内容`">
                           <a-input v-model="option.key" placeholder="请输入选项内容" />
@@ -136,10 +167,14 @@
                           <a-input v-model="option.value" placeholder="请输入选项值" />
                         </a-form-item>
                         <a-space>
-                          <a-button @click="addOption(question,optionIndex+1)" type="primary">增加选项
+                          <a-button @click="addOption(question, optionIndex + 1)" type="primary"
+                            >增加选项
                           </a-button>
-                          <a-button @click="deleteOption(question,optionIndex)" status="danger"
-                                    :style="{marginLeft:'10px'}">删除选项
+                          <a-button
+                            @click="deleteOption(question, optionIndex)"
+                            status="danger"
+                            :style="{ marginLeft: '10px' }"
+                            >删除选项
                           </a-button>
                         </a-space>
                       </a-space>
@@ -147,18 +182,25 @@
                   </a-space>
                 </a-form-item>
                 <a-space>
-                  <a-button @click="addOption(question,question.options?.length||0)" type="primary">底部增加选项
+                  <a-button
+                    @click="addOption(question, question.options?.length || 0)"
+                    type="primary"
+                    >底部增加选项
                   </a-button>
-                  <a-button @click="editAddQuestion(index+1)" type="primary">增加题目
-                  </a-button>
-                  <a-button @click="editDeleteQuestion(index)" status="danger" :style="{marginLeft:'10px'}">删除题目
+                  <a-button @click="editAddQuestion(index + 1)" type="primary">增加题目 </a-button>
+                  <a-button
+                    @click="editDeleteQuestion(index)"
+                    status="danger"
+                    :style="{ marginLeft: '10px' }"
+                    >删除题目
                   </a-button>
                 </a-space>
               </div>
             </a-space>
             <a-form-item>
-              <a-space :style="{marginTop:'20px'}">
-                <a-button @click="editAddQuestion(editQuestionContent.length)" type="primary">底部增加题目
+              <a-space :style="{ marginTop: '20px' }">
+                <a-button @click="editAddQuestion(editQuestionContent.length)" type="primary"
+                  >底部增加题目
                 </a-button>
               </a-space>
             </a-form-item>
@@ -253,12 +295,10 @@ const editQuestionContent = ref<API.QuestionContentDTO[]>([])
 
 const editAddQuestion = (index: number) => {
   editQuestionContent.value.splice(index, 0, {
-      title: '',
-      options: []
-    }
-  )
+    title: '',
+    options: []
+  })
 }
-
 
 const editDeleteQuestion = (index: number) => {
   editQuestionContent.value.splice(index, 1)
@@ -315,10 +355,9 @@ const addQuestionContent = ref<API.QuestionContentDTO[]>([])
 
 const addQuestion = (index: number) => {
   addQuestionContent.value.splice(index, 0, {
-      title: '',
-      options: []
-    }
-  )
+    title: '',
+    options: []
+  })
 }
 
 const deleteQuestion = (index: number) => {
@@ -330,10 +369,9 @@ const addOption = (question: API.QuestionContentDTO, index: number) => {
     question.options = []
   }
   question.options.splice(index, 0, {
-      key: '',
-      value: ''
-    }
-  )
+    key: '',
+    value: ''
+  })
 }
 
 const deleteOption = (question: API.QuestionContentDTO, index: number) => {

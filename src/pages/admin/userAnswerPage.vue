@@ -1,15 +1,23 @@
 <!--suppress VueUnrecognizedSlot -->
 <template>
   <div id="userAnswerPage">
-    <a-input-search class="search-input" placeholder="按描述搜索" search-button @search="handleSearch" allow-clear>
+    <a-input-search
+      class="search-input"
+      placeholder="按描述搜索"
+      search-button
+      @search="handleSearch"
+      allow-clear
+    >
       <template #button-icon>
         <icon-search />
       </template>
-      <template #button-default>
-        搜索
-      </template>
+      <template #button-default> 搜索 </template>
     </a-input-search>
-    <a-button type="primary" @click="addUserAnswerClick" style="margin-bottom: 10px; margin-left: 20px;">
+    <a-button
+      type="primary"
+      @click="addUserAnswerClick"
+      style="margin-bottom: 10px; margin-left: 20px"
+    >
       <template #icon>
         <icon-plus />
       </template>
@@ -24,10 +32,10 @@
       :loading="loading"
       :show-header="true"
       :pagination="{
-        showTotal:true,
-        pageSize:searchParams.pageSize,
-        current:searchParams.current,
-        total:total
+        showTotal: true,
+        pageSize: searchParams.pageSize,
+        current: searchParams.current,
+        total: total
       }"
       @page-change="handlePageChange"
     >
@@ -41,7 +49,11 @@
         {{ SCORING_STRATEGY[record.scoringStrategy as 0 | 1] || '未知评分策略' }}
       </template>
       <template #choices="{ record }">
-        <a-tag v-for="(tag, index) in JSON.parse(record.choices)" :key="index" style="margin-right: 4px;">{{ tag }}
+        <a-tag
+          v-for="(tag, index) in JSON.parse(record.choices)"
+          :key="index"
+          style="margin-right: 4px"
+          >{{ tag }}
         </a-tag>
       </template>
       <template #createTime="{ record }">
@@ -63,11 +75,14 @@
       </template>
     </a-table>
     <div id="addUserAnswer">
-      <a-drawer :width="500" :visible="addUserAnswerVisible" @ok="addUserAnswerOk" @cancel="addUserAnswerCancel"
-                unmountOnClose>
-        <template #title>
-          新增用户回答
-        </template>
+      <a-drawer
+        :width="500"
+        :visible="addUserAnswerVisible"
+        @ok="addUserAnswerOk"
+        @cancel="addUserAnswerCancel"
+        unmountOnClose
+      >
+        <template #title> 新增用户回答 </template>
         <div class="add-userAnswer-form">
           <a-form :model="addUserAnswerForm" label-width="80">
             <a-form-item label="题库id">
@@ -85,11 +100,14 @@
       </a-drawer>
     </div>
     <div id="editUserAnswer">
-      <a-drawer :width="500" :visible="editUserAnswerVisible" @ok="editUserAnswerOk" @cancel="editUserAnswerCancel"
-                unmountOnClose>
-        <template #title>
-          编辑用户回答
-        </template>
+      <a-drawer
+        :width="500"
+        :visible="editUserAnswerVisible"
+        @ok="editUserAnswerOk"
+        @cancel="editUserAnswerCancel"
+        unmountOnClose
+      >
+        <template #title> 编辑用户回答 </template>
         <div class="add-userAnswer-form">
           <a-form :model="editUserAnswerForm" label-width="80">
             <a-form-item label="题库id">
@@ -193,7 +211,6 @@ const editUserAnswerCancel = () => {
 
 let editUserAnswerForm = ref<API.UserAnswerUpdateRequest>({})
 
-
 const addUserAnswerVisible = ref(false)
 
 const addUserAnswerClick = () => {
@@ -238,7 +255,6 @@ const handleDelete = async (record: API.UserAnswer) => {
 const handleSearch = (value: string) => {
   searchParams.value = { ...searchParams.value, resultDesc: value }
 }
-
 </script>
 
 <style scoped>

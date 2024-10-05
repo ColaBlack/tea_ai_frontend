@@ -1,50 +1,54 @@
 <template>
   <div id="bank-detail-page">
-    <a-card style="padding: 20px;">
+    <a-card style="padding: 20px">
       <a-row :gutter="16">
         <a-col :span="18">
-          <h2 style="margin-bottom: 16px; color: #333;">
-            题库名称：{{ bank.bankName }}
-          </h2>
-          <div style="margin-bottom: 8px; color: #666;">
-            题库描述：{{ bank.bankDesc }}
-          </div>
-          <div style="margin-bottom: 8px; color: #666;">
+          <h2 style="margin-bottom: 16px; color: #333">题库名称：{{ bank.bankName }}</h2>
+          <div style="margin-bottom: 8px; color: #666">题库描述：{{ bank.bankDesc }}</div>
+          <div style="margin-bottom: 8px; color: #666">
             题库类型：{{ BANK_TYPE[bank.bankType as 0 | 1] || '未知题库类型' }}
           </div>
-          <div style="margin-bottom: 8px; color: #666;">
+          <div style="margin-bottom: 8px; color: #666">
             评分策略：{{ SCORING_STRATEGY[bank.scoringStrategy as 0 | 1] || '未知评分策略' }}
           </div>
-          <hr style="margin: 16px 0; border: none; border-top: 1px solid #eee;">
-          <div style="margin-bottom: 8px; color: #666;">
-            创建人：{{ bank.user?.userName }}
-          </div>
-          <div style="margin-bottom: 8px; color: #666;">
+          <hr style="margin: 16px 0; border: none; border-top: 1px solid #eee" />
+          <div style="margin-bottom: 8px; color: #666">创建人：{{ bank.user?.userName }}</div>
+          <div style="margin-bottom: 8px; color: #666">
             创建时间：{{ dayjs(bank.createTime).format('YYYY-MM-DD HH:mm:ss') }}
           </div>
-          <div style="color: #666;">
+          <div style="color: #666">
             更新时间：{{ dayjs(bank.updateTime).format('YYYY-MM-DD HH:mm:ss') }}
           </div>
-          <a-space style="margin-top: 16px;">
-            <a-button type="primary" @click="router.push('/answer/do/' + bank.id )">
+          <a-space style="margin-top: 16px">
+            <a-button type="primary" @click="router.push('/answer/do/' + bank.id)">
               开始答题
             </a-button>
-            <a-button type="outline" @click="router.push('/')">
-              返回题库列表
-            </a-button>
-            <a-button v-if="canEdit" type="secondary" @click="router.push('/question/update/' + bank.id)">
+            <a-button type="outline" @click="router.push('/')"> 返回题库列表 </a-button>
+            <a-button
+              v-if="canEdit"
+              type="secondary"
+              @click="router.push('/question/update/' + bank.id)"
+            >
               设置题目内容
             </a-button>
-            <a-button v-if="canEdit" type="secondary" @click="router.push('/scoring_result/update/' + bank.id)">
+            <a-button
+              v-if="canEdit"
+              type="secondary"
+              @click="router.push('/scoring_result/update/' + bank.id)"
+            >
               设置评分结果
             </a-button>
-            <a-button v-if="canEdit" type="secondary" @click="router.push('/bank/update/' + bank.id)">
+            <a-button
+              v-if="canEdit"
+              type="secondary"
+              @click="router.push('/bank/update/' + bank.id)"
+            >
               修改题库信息
             </a-button>
           </a-space>
         </a-col>
         <a-col :span="6">
-          <a-image :src="bank.bankIcon" class="bank-icon" width="100%" style="border-radius: 8px;" />
+          <a-image :src="bank.bankIcon" class="bank-icon" width="100%" style="border-radius: 8px" />
         </a-col>
       </a-row>
     </a-card>
@@ -52,7 +56,6 @@
 </template>
 
 <script setup lang="ts">
-
 import { computed, onMounted, ref } from 'vue'
 import { getQuestionBankVoByIdUsingGet } from '@/api/questionBankController'
 import { Message } from '@arco-design/web-vue'
@@ -97,7 +100,9 @@ const userStore = useUserStore()
 
 const canEdit = computed(() => {
   // 只有题库创建者或者管理员可以编辑题库信息
-  return userStore.loginUser.id === bank.value.userId || userStore.loginUser.userRole === roleEnums.ADMIN
+  return (
+    userStore.loginUser.id === bank.value.userId || userStore.loginUser.userRole === roleEnums.ADMIN
+  )
 })
 </script>
 
@@ -106,5 +111,4 @@ const canEdit = computed(() => {
   max-width: 1200px;
   margin: 0 auto;
 }
-
 </style>

@@ -10,8 +10,11 @@
           </a-form-item>
           <a-form-item field="content" :label="`题目${index + 1}选项`">
             <a-space direction="vertical" fill>
-              <a-form-item v-for="(option, optionIndex) in question.options" :key="optionIndex"
-                           :label="`选项${optionIndex + 1}`">
+              <a-form-item
+                v-for="(option, optionIndex) in question.options"
+                :key="optionIndex"
+                :label="`选项${optionIndex + 1}`"
+              >
                 <a-space direction="vertical" fill>
                   <a-form-item :label="`选项内容`">
                     <a-input v-model="option.key" placeholder="请输入选项内容" />
@@ -20,10 +23,14 @@
                     <a-input v-model="option.value" placeholder="请输入选项值" />
                   </a-form-item>
                   <a-space>
-                    <a-button @click="addOption(question,optionIndex+1)" type="primary">增加选项
+                    <a-button @click="addOption(question, optionIndex + 1)" type="primary"
+                      >增加选项
                     </a-button>
-                    <a-button @click="deleteOption(question,optionIndex)" status="danger"
-                              :style="{marginLeft:'10px'}">删除选项
+                    <a-button
+                      @click="deleteOption(question, optionIndex)"
+                      status="danger"
+                      :style="{ marginLeft: '10px' }"
+                      >删除选项
                     </a-button>
                   </a-space>
                 </a-space>
@@ -31,18 +38,20 @@
             </a-space>
           </a-form-item>
           <a-space>
-            <a-button @click="addOption(question,question.options?.length||0)" type="primary">底部增加选项
+            <a-button @click="addOption(question, question.options?.length || 0)" type="primary"
+              >底部增加选项
             </a-button>
-            <a-button @click="addQuestion(index+1)" type="primary">增加题目
-            </a-button>
-            <a-button @click="deleteQuestion(index)" status="danger" :style="{marginLeft:'10px'}">删除题目
+            <a-button @click="addQuestion(index + 1)" type="primary">增加题目 </a-button>
+            <a-button @click="deleteQuestion(index)" status="danger" :style="{ marginLeft: '10px' }"
+              >删除题目
             </a-button>
           </a-space>
         </div>
       </a-space>
       <a-form-item>
-        <a-space :style="{marginTop:'20px'}">
-          <a-button @click="addQuestion(questionContent.length)" type="primary">底部增加题目
+        <a-space :style="{ marginTop: '20px' }">
+          <a-button @click="addQuestion(questionContent.length)" type="primary"
+            >底部增加题目
           </a-button>
           <a-button class="submit-btn" type="primary" @click="handleSubmit">提交</a-button>
           <a-button type="outline" @click="handleAIClick">AI 生成题目</a-button>
@@ -55,12 +64,7 @@
           >
             <template #title> AI 生成题目</template>
             <div>
-              <a-form
-                :model="AIForm"
-                label-align="left"
-                auto-label-width
-                @submit="handleAIOk"
-              >
+              <a-form :model="AIForm" label-align="left" auto-label-width @submit="handleAIOk">
                 <a-form-item field="questionNumber" label="题目数量">
                   <a-input-number
                     v-model="AIForm.questionNumber"
@@ -77,8 +81,7 @@
                     placeholder="请输入选项数量"
                   />
                 </a-form-item>
-                <a-form-item>
-                </a-form-item>
+                <a-form-item> </a-form-item>
               </a-form>
             </div>
           </a-drawer>
@@ -105,10 +108,12 @@ interface Props {
 
 const props = defineProps<Props>()
 
-
 const questionContent = ref<API.QuestionContentDTO[]>([])
 
-const form = ref<API.QuestionAddRequest>({ questionBankId: props.bankId, questionContent: questionContent.value })
+const form = ref<API.QuestionAddRequest>({
+  questionBankId: props.bankId,
+  questionContent: questionContent.value
+})
 
 const router = useRouter()
 
@@ -169,7 +174,9 @@ let creator = ref(-1)
 
 const canEdit = computed(() => {
   // 只有题库创建者或者管理员可以编辑题目信息
-  return userStore.loginUser.id === creator.value || userStore.loginUser.userRole === roleEnums.ADMIN
+  return (
+    userStore.loginUser.id === creator.value || userStore.loginUser.userRole === roleEnums.ADMIN
+  )
 })
 
 onMounted(() => {
@@ -178,12 +185,10 @@ onMounted(() => {
 
 const addQuestion = (index: number) => {
   questionContent.value.splice(index, 0, {
-      title: '',
-      options: []
-    }
-  )
+    title: '',
+    options: []
+  })
 }
-
 
 const deleteQuestion = (index: number) => {
   questionContent.value.splice(index, 1)
@@ -194,10 +199,9 @@ const addOption = (question: API.QuestionContentDTO, index: number) => {
     question.options = []
   }
   question.options.splice(index, 0, {
-      key: '',
-      value: ''
-    }
-  )
+    key: '',
+    value: ''
+  })
 }
 
 const deleteOption = (question: API.QuestionContentDTO, index: number) => {
@@ -224,7 +228,10 @@ const handleAIOk = async () => {
   }
 
   // 发送sse请求
-  const eventSource = new EventSource(BASE_URL + `/api/ai/generate/question/sse?bankId=${props.bankId}&optionNumber=${AIForm.value.optionNumber}&questionNumber=${AIForm.value.questionNumber}`)
+  const eventSource = new EventSource(
+    BASE_URL +
+      `/api/ai/generate/question/sse?bankId=${props.bankId}&optionNumber=${AIForm.value.optionNumber}&questionNumber=${AIForm.value.questionNumber}`
+  )
 
   visibleAI.value = false
   Message.success('生成中，请稍后')
@@ -232,7 +239,7 @@ const handleAIOk = async () => {
   // 监听sse消息
   eventSource.onmessage = (event) => {
     const res = JSON.parse(event.data)
-    form.value.questionContent = [...form.value.questionContent || [], res]
+    form.value.questionContent = [...(form.value.questionContent || []), res]
     questionContent.value = form.value.questionContent
   }
   eventSource.onerror = (event) => {
@@ -257,6 +264,4 @@ const handleAICancel = () => {
   margin: 0 auto;
   max-width: 600px;
 }
-
-
 </style>

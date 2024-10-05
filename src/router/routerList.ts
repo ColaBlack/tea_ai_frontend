@@ -85,7 +85,8 @@ export const routerList: Array<RouteRecordRaw> = [
       access: roleEnums.PUBLIC,
       hideInMenu: true
     }
-  }, {
+  },
+  {
     path: '/bank/add',
     name: '创建题库',
     component: BankAddPage,

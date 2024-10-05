@@ -13,8 +13,11 @@
       <a-col flex="64px">
         <div v-if="userStore.loginUser.id">
           <a-dropdown v-if="userStore.loginUser.id">
-            <a-avatar :image-url="userStore.loginUser.userAvatar"
-                      auto-fix-font-size class="avatar" />
+            <a-avatar
+              :image-url="userStore.loginUser.userAvatar"
+              auto-fix-font-size
+              class="avatar"
+            />
             <template #content>
               <a-doption @click="logout">注销</a-doption>
             </template>
@@ -61,7 +64,10 @@ onMounted(async () => {
 const visibleRoutes = computed(() => {
   return routerList.value.filter((item: RouteRecordRaw) => {
     // 只显示有权限的没隐藏的菜单
-    return item.meta?.hideInMenu !== true && CheckAccess(userStore.loginUser, item.meta?.access as string)
+    return (
+      item.meta?.hideInMenu !== true &&
+      CheckAccess(userStore.loginUser, item.meta?.access as string)
+    )
   })
 })
 

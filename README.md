@@ -29,11 +29,7 @@ pnpm install
 3.修改/src/config/request.ts中的请求地址
 
 ```typescript
-const request = axios.create({
-  baseURL: 'http://localhost:1221',//修改为自己的请求地址
-  timeout: 10000,
-  withCredentials: true
-})
+export const BASE_URL = 'http://localhost:1221' //修改为自己的请求地址
 ```
 
 4.修改/src/config/openapi.config.js中的后端接口文档地址

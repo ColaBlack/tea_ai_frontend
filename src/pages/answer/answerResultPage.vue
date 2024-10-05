@@ -18,9 +18,7 @@
             />
             <a-typography-text>{{ data.user?.userName }}</a-typography-text>
           </div>
-          <p>
-            答题时间：{{ dayjs(data.createTime).format('YYYY-MM-DD HH:mm:ss') }}
-          </p>
+          <p>答题时间：{{ dayjs(data.createTime).format('YYYY-MM-DD HH:mm:ss') }}</p>
           <a-space size="medium">
             <a-button type="primary" @click="router.push(`/answer/do/${data.bankId}`)">
               去答题
@@ -45,13 +43,12 @@ import { BANK_TYPE, SCORING_STRATEGY } from '@/enums/bankEnums'
 import router from '@/router'
 
 interface Props {
-  id: number;
+  id: number
 }
 
 const props = defineProps<Props>()
 
 const data = ref<API.UserAnswerVO>({})
-
 
 const loadData = async () => {
   const res = await getUserAnswerVoByIdUsingGet({

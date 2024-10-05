@@ -1,15 +1,19 @@
 <!--suppress VueUnrecognizedSlot -->
 <template>
   <div id="userPage">
-    <a-input-search class="search-input" placeholder="按名称搜索" search-button @search="handleSearch" allow-clear>
+    <a-input-search
+      class="search-input"
+      placeholder="按名称搜索"
+      search-button
+      @search="handleSearch"
+      allow-clear
+    >
       <template #button-icon>
         <icon-search />
       </template>
-      <template #button-default>
-        搜索
-      </template>
+      <template #button-default> 搜索 </template>
     </a-input-search>
-    <a-button type="primary" @click="addUserClick" style="margin-bottom: 10px; margin-left: 20px;">
+    <a-button type="primary" @click="addUserClick" style="margin-bottom: 10px; margin-left: 20px">
       <template #icon>
         <icon-plus />
       </template>
@@ -24,10 +28,10 @@
       :loading="loading"
       :show-header="true"
       :pagination="{
-        showTotal:true,
-        pageSize:searchParams.pageSize,
-        current:searchParams.current,
-        total:total
+        showTotal: true,
+        pageSize: searchParams.pageSize,
+        current: searchParams.current,
+        total: total
       }"
       @page-change="handlePageChange"
     >
@@ -46,7 +50,7 @@
       <template #action="{ record }">
         <a-button type="outline" @click="editUserClick(record)">编辑</a-button>
         <a-popconfirm content="你确定要删除该用户吗？" @ok="handleDelete(record)">
-          <a-button status="danger" type="primary" style="margin-left: 10px;">
+          <a-button status="danger" type="primary" style="margin-left: 10px">
             <template #icon>
               <icon-delete />
             </template>
@@ -56,13 +60,20 @@
       </template>
     </a-table>
     <div id="addUser">
-      <a-drawer :width="500" :visible="addUserVisible" @ok="addUserOk" @cancel="addUserCancel" unmountOnClose>
-        <template #title>
-          新增用户
-        </template>
+      <a-drawer
+        :width="500"
+        :visible="addUserVisible"
+        @ok="addUserOk"
+        @cancel="addUserCancel"
+        unmountOnClose
+      >
+        <template #title> 新增用户 </template>
         <div class="add-user-form">
           <a-form :model="addUserForm" label-width="80">
-            <a-form-item label="用户账号" :rules="[{ required: true, message: '用户账号是必填项' }]">
+            <a-form-item
+              label="用户账号"
+              :rules="[{ required: true, message: '用户账号是必填项' }]"
+            >
               <a-input v-model="addUserForm.userAccount" />
               <template #extra>
                 <div>账号由字母、数字，长度在4-20位之间，必须唯一</div>
@@ -80,21 +91,32 @@
                 <div>可为空，若为空则使用默认头像</div>
               </template>
             </a-form-item>
-            <a-form-item label="用户角色" :rules="[{ required: true, message: '用户角色是必填项' }]">
+            <a-form-item
+              label="用户角色"
+              :rules="[{ required: true, message: '用户角色是必填项' }]"
+            >
               <a-select v-model="addUserForm.userRole" placeholder="请选择用户角色" allow-clear>
-                <a-option v-for="(value, key) of USER_STATUS" :value="key" :key="key" :label="value"></a-option>
+                <a-option
+                  v-for="(value, key) of USER_STATUS"
+                  :value="key"
+                  :key="key"
+                  :label="value"
+                ></a-option>
               </a-select>
             </a-form-item>
-
           </a-form>
         </div>
       </a-drawer>
     </div>
     <div id="editUser">
-      <a-drawer :width="500" :visible="editUserVisible" @ok="editUserOk" @cancel="editUserCancel" unmountOnClose>
-        <template #title>
-          编辑用户
-        </template>
+      <a-drawer
+        :width="500"
+        :visible="editUserVisible"
+        @ok="editUserOk"
+        @cancel="editUserCancel"
+        unmountOnClose
+      >
+        <template #title> 编辑用户 </template>
         <div class="add-user-form">
           <a-form :model="editUserForm" label-width="80">
             <a-form-item label="用户昵称">
@@ -117,10 +139,14 @@
             </a-form-item>
             <a-form-item label="用户角色">
               <a-select v-model="editUserForm.userRole" placeholder="请选择用户角色" allow-clear>
-                <a-option v-for="(value, key) of USER_STATUS" :value="key" :key="key" :label="value"></a-option>
+                <a-option
+                  v-for="(value, key) of USER_STATUS"
+                  :value="key"
+                  :key="key"
+                  :label="value"
+                ></a-option>
               </a-select>
             </a-form-item>
-
           </a-form>
         </div>
       </a-drawer>
@@ -217,7 +243,6 @@ let editUserForm = ref<API.UserUpdateRequest>({
   userRole: ''
 })
 
-
 const addUserVisible = ref(false)
 
 const addUserClick = () => {
@@ -267,7 +292,6 @@ const handleDelete = async (record: API.User) => {
 const handleSearch = (value: string) => {
   searchParams.value = { ...searchParams.value, userName: value }
 }
-
 </script>
 
 <style scoped>

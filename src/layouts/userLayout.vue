@@ -23,7 +23,6 @@ import GlobalFooter from '@/components/globalFooter.vue'
 <style scoped>
 #user-layout {
   background-image: url('@/assets/loginBackground.png');
-
 }
 
 #user-layout .logo {

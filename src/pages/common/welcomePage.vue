@@ -1,19 +1,28 @@
 <!--suppress VueUnrecognizedSlot -->
 <template>
   <div id="home-page">
-    <a-input-search class="search-input" placeholder="按名称搜索题库" search-button @search="handleSearch" allow-clear size="large">
+    <a-input-search
+      class="search-input"
+      placeholder="按名称搜索题库"
+      search-button
+      @search="handleSearch"
+      allow-clear
+      size="large"
+    >
       <template #button-icon>
         <icon-search />
       </template>
-      <template #button-default>
-        搜索
-      </template>
+      <template #button-default> 搜索 </template>
     </a-input-search>
     <a-list
       class="card-layout"
       :bordered="false"
       :data="data"
-      :pagination-props="{ pageSize: searchParams.pageSize, current: searchParams.current, total: total }"
+      :pagination-props="{
+        pageSize: searchParams.pageSize,
+        current: searchParams.current,
+        total: total
+      }"
       @page-change="handlePageChange"
       :grid-props="{ gutter: [20, 20], sm: 24, md: 12, lg: 8, xl: 6 }"
     >
@@ -43,7 +52,7 @@ const handlePageChange = (page: number) => {
   searchParams.value = { ...searchParams.value, current: page }
 }
 
-const data = ref<API.QuestionBank []>([])
+const data = ref<API.QuestionBank[]>([])
 const total = ref<number>(0)
 
 const loadData = async () => {
@@ -69,13 +78,13 @@ watchEffect(() => {
   max-width: 500px;
 }
 
-#home-page{
+#home-page {
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
 }
 
 #home-page .card-layout {
-margin-top: 20px;
+  margin-top: 20px;
 }
 </style>

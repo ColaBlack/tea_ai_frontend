@@ -1,15 +1,23 @@
 <!--suppress VueUnrecognizedSlot -->
 <template>
   <div id="scoringResultPage">
-    <a-input-search class="search-input" placeholder="按结果名称搜索" search-button @search="handleSearch" allow-clear>
+    <a-input-search
+      class="search-input"
+      placeholder="按结果名称搜索"
+      search-button
+      @search="handleSearch"
+      allow-clear
+    >
       <template #button-icon>
         <icon-search />
       </template>
-      <template #button-default>
-        搜索
-      </template>
+      <template #button-default> 搜索 </template>
     </a-input-search>
-    <a-button type="primary" @click="addScoringResultClick" style="margin-bottom: 10px; margin-left: 20px;">
+    <a-button
+      type="primary"
+      @click="addScoringResultClick"
+      style="margin-bottom: 10px; margin-left: 20px"
+    >
       <template #icon>
         <icon-plus />
       </template>
@@ -24,10 +32,10 @@
       :loading="loading"
       :show-header="true"
       :pagination="{
-        showTotal:true,
-        pageSize:searchParams.pageSize,
-        current:searchParams.current,
-        total:total
+        showTotal: true,
+        pageSize: searchParams.pageSize,
+        current: searchParams.current,
+        total: total
       }"
       @page-change="handlePageChange"
     >
@@ -35,7 +43,11 @@
         <a-image width="64" :src="record.resultPicture" />
       </template>
       <template #resultProp="{ record }">
-        <a-tag v-for="(tag, index) in JSON.parse(record.resultProp)" :key="index" style="margin-right: 4px;">{{ tag }}
+        <a-tag
+          v-for="(tag, index) in JSON.parse(record.resultProp)"
+          :key="index"
+          style="margin-right: 4px"
+          >{{ tag }}
         </a-tag>
       </template>
       <template #createTime="{ record }">
@@ -57,11 +69,14 @@
       </template>
     </a-table>
     <div id="addScoringResult">
-      <a-drawer :width="500" :visible="addScoringResultVisible" @ok="addScoringResultOk"
-                @cancel="addScoringResultCancel" unmountOnClose>
-        <template #title>
-          新增评分结果
-        </template>
+      <a-drawer
+        :width="500"
+        :visible="addScoringResultVisible"
+        @ok="addScoringResultOk"
+        @cancel="addScoringResultCancel"
+        unmountOnClose
+      >
+        <template #title> 新增评分结果 </template>
         <div class="add-scoringResult-form">
           <a-form :model="addScoringResultForm" label-width="80">
             <a-form-item label="题库id">
@@ -95,11 +110,14 @@
       </a-drawer>
     </div>
     <div id="editScoringResult">
-      <a-drawer :width="500" :visible="editScoringResultVisible" @ok="editScoringResultOk"
-                @cancel="editScoringResultCancel" unmountOnClose>
-        <template #title>
-          编辑评分结果
-        </template>
+      <a-drawer
+        :width="500"
+        :visible="editScoringResultVisible"
+        @ok="editScoringResultOk"
+        @cancel="editScoringResultCancel"
+        unmountOnClose
+      >
+        <template #title> 编辑评分结果 </template>
         <div class="add-scoringResult-form">
           <a-form :model="editScoringResultForm" label-width="80">
             <a-form-item label="结果描述">
@@ -146,7 +164,8 @@ import { IconDelete } from '@arco-design/web-vue/es/icon'
 
 const loading = ref(false)
 
-const columns = [{ title: 'id', dataIndex: 'id' },
+const columns = [
+  { title: 'id', dataIndex: 'id' },
   { title: '结果id', dataIndex: 'id' },
   { title: '题库id', dataIndex: 'bankid' },
   { title: '结果描述', dataIndex: 'resultDesc' },
@@ -215,7 +234,6 @@ const editScoringResultCancel = () => {
 
 let editScoringResultForm = ref<API.ScoringResultUpdateRequest>({})
 
-
 const addScoringResultVisible = ref(false)
 
 const addScoringResultClick = () => {
@@ -260,7 +278,6 @@ const handleDelete = async (record: API.ScoringResult) => {
 const handleSearch = (value: string) => {
   searchParams.value = { ...searchParams.value, resultName: value }
 }
-
 </script>
 
 <style scoped>

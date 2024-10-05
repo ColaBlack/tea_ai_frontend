@@ -7,9 +7,8 @@ export enum USER_ENUMS {
   BANNED = 'banned'
 }
 
-
 export const USER_STATUS = {
-[USER_ENUMS.ADMIN]: '管理员',
-[USER_ENUMS.USER]: '普通用户',
-[USER_ENUMS.BANNED]: '封禁用户'
+  [USER_ENUMS.ADMIN]: '管理员',
+  [USER_ENUMS.USER]: '普通用户',
+  [USER_ENUMS.BANNED]: '封禁用户'
 }

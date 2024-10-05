@@ -4,8 +4,15 @@
       <a-space direction="vertical">
         <h1>{{ questionBank.bankName }}</h1>
         <p>{{ questionBank.bankDesc }}</p>
-        <h3 v-if="currentQuestion && currentQuestion.title">第{{ current }}题：{{ currentQuestion.title }}</h3>
-        <a-radio-group direction="vertical" v-model="currentAnswer" :options="currentOption" @change="doChange" />
+        <h3 v-if="currentQuestion && currentQuestion.title">
+          第{{ current }}题：{{ currentQuestion.title }}
+        </h3>
+        <a-radio-group
+          direction="vertical"
+          v-model="currentAnswer"
+          :options="currentOption"
+          @change="doChange"
+        />
         <a-space size="large" style="margin-top: 24px">
           <a-button
             type="primary"
@@ -26,9 +33,7 @@
           >
             查看结果
           </a-button>
-          <a-button v-if="current > 1" circle @click="current -= 1">
-            上一题
-          </a-button>
+          <a-button v-if="current > 1" circle @click="current -= 1"> 上一题 </a-button>
         </a-space>
       </a-space>
     </a-card>
@@ -59,9 +64,11 @@ const currentQuestion = ref<API.QuestionContentDTO>({})
 
 const currentOption = computed(() => {
   if (!currentQuestion.value) return []
-  return currentQuestion.value.options ? currentQuestion.value?.options.map((item) => {
-    return { label: `选项${item.key}:${item.value}`, value: item.key }
-  }) : []
+  return currentQuestion.value.options
+    ? currentQuestion.value?.options.map((item) => {
+        return { label: `选项${item.key}:${item.value}`, value: item.key }
+      })
+    : []
 })
 
 const currentAnswer = ref<string>('')
@@ -132,6 +139,4 @@ const doSubmit = async () => {
 const loading = ref(false)
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

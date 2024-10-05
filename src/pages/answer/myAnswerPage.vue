@@ -1,13 +1,17 @@
 <!--suppress VueUnrecognizedSlot -->
 <template>
   <div id="userAnswerPage">
-    <a-input-search class="search-input" placeholder="按描述搜索" search-button @search="handleSearch" allow-clear>
+    <a-input-search
+      class="search-input"
+      placeholder="按描述搜索"
+      search-button
+      @search="handleSearch"
+      allow-clear
+    >
       <template #button-icon>
         <icon-search />
       </template>
-      <template #button-default>
-        搜索
-      </template>
+      <template #button-default> 搜索 </template>
     </a-input-search>
     <a-table
       :columns="columns"
@@ -18,10 +22,10 @@
       :loading="loading"
       :show-header="true"
       :pagination="{
-        showTotal:true,
-        pageSize:searchParams.pageSize,
-        current:searchParams.current,
-        total:total
+        showTotal: true,
+        pageSize: searchParams.pageSize,
+        current: searchParams.current,
+        total: total
       }"
       @page-change="handlePageChange"
     >
@@ -38,7 +42,9 @@
         {{ dayjs(record.createTime).format('YYYY-MM-DD HH:mm:ss') }}
       </template>
       <template #choices="{ record }">
-        <a-tag v-for="(tag, index) in record.choices" :key="index" style="margin-right: 4px;">{{ tag }}</a-tag>
+        <a-tag v-for="(tag, index) in record.choices" :key="index" style="margin-right: 4px">{{
+          tag
+        }}</a-tag>
       </template>
       <template #action="{ record }">
         <a-popconfirm content="你确定要删除该用户回答吗？" @ok="handleDelete(record)">
@@ -56,7 +62,10 @@
 
 <script setup lang="ts">
 import { reactive, ref, watchEffect } from 'vue'
-import { deleteUserAnswerUsingPost, listMyUserAnswerVoByPageUsingPost } from '@/api/userAnswerController'
+import {
+  deleteUserAnswerUsingPost,
+  listMyUserAnswerVoByPageUsingPost
+} from '@/api/userAnswerController'
 import { Message, Modal } from '@arco-design/web-vue'
 import { dayjs } from '@arco-design/web-vue/es/_utils/date'
 import { IconDelete } from '@arco-design/web-vue/es/icon'
@@ -86,7 +95,7 @@ const total = ref<number>(0)
 
 const loadData = async () => {
   loading.value = true
-  const res = await listMyUserAnswerVoByPageUsingPost((searchParams.value))
+  const res = await listMyUserAnswerVoByPageUsingPost(searchParams.value)
   if (res.data.code === 200) {
     data.value = res.data.data?.records || []
     total.value = res.data.data?.total || 0
@@ -131,7 +140,6 @@ const handleDelete = async (record: API.UserAnswer) => {
 const handleSearch = (value: string) => {
   searchParams.value = { ...searchParams.value, resultDesc: value }
 }
-
 </script>
 
 <style scoped>

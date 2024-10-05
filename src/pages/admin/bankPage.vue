@@ -1,15 +1,19 @@
 <!--suppress VueUnrecognizedSlot -->
 <template>
   <div id="userPage">
-    <a-input-search class="search-input" placeholder="按名称搜索" search-button @search="handleSearch" allow-clear>
+    <a-input-search
+      class="search-input"
+      placeholder="按名称搜索"
+      search-button
+      @search="handleSearch"
+      allow-clear
+    >
       <template #button-icon>
         <icon-search />
       </template>
-      <template #button-default>
-        搜索
-      </template>
+      <template #button-default> 搜索 </template>
     </a-input-search>
-    <a-button type="primary" @click="addBankClick" style="margin-bottom: 10px; margin-left: 20px;">
+    <a-button type="primary" @click="addBankClick" style="margin-bottom: 10px; margin-left: 20px">
       <template #icon>
         <icon-plus />
       </template>
@@ -24,10 +28,10 @@
       :loading="loading"
       :show-header="true"
       :pagination="{
-        showTotal:true,
-        pageSize:searchParams.pageSize,
-        current:searchParams.current,
-        total:total
+        showTotal: true,
+        pageSize: searchParams.pageSize,
+        current: searchParams.current,
+        total: total
       }"
       @page-change="handlePageChange"
     >
@@ -55,7 +59,7 @@
       <template #action="{ record }">
         <a-button type="outline" @click="editBankClick(record)">编辑</a-button>
         <a-popconfirm content="你确定要删除该题库吗？" @ok="handleDelete(record)">
-          <a-button status="danger" type="primary" style="margin-left: 10px;">
+          <a-button status="danger" type="primary" style="margin-left: 10px">
             <template #icon>
               <icon-delete />
             </template>
@@ -71,7 +75,8 @@
         </a-button>
         <a-button
           v-if="record.reviewStatus !== REVIEW_STATUS[REVIEW_ENUMS.REJECTED]"
-          status="warning" style="margin-left: 10px;margin-top: 10px;"
+          status="warning"
+          style="margin-left: 10px; margin-top: 10px"
           @click="doReview(record, REVIEW_ENUMS.REJECTED, '审核不合格，请修改后重新提交')"
         >
           拒绝
@@ -79,33 +84,63 @@
       </template>
     </a-table>
     <div id="addBank">
-      <a-drawer :width="500" :visible="addBankVisible" @ok="addBankOk" @cancel="addBankCancel" unmountOnClose>
-        <template #title>
-          新增题库
-        </template>
+      <a-drawer
+        :width="500"
+        :visible="addBankVisible"
+        @ok="addBankOk"
+        @cancel="addBankCancel"
+        unmountOnClose
+      >
+        <template #title> 新增题库 </template>
         <div class="add-bank-form">
           <a-form :model="addBankForm" label-width="80">
-            <a-form-item label="题库名称" :rules="[{ required: true, message: '题库名称是必填项' }]">
+            <a-form-item
+              label="题库名称"
+              :rules="[{ required: true, message: '题库名称是必填项' }]"
+            >
               <a-input v-model="addBankForm.bankName" />
             </a-form-item>
-            <a-form-item label="题库描述" :rules="[{ required: true, message: '题库描述是必填项' }]">
+            <a-form-item
+              label="题库描述"
+              :rules="[{ required: true, message: '题库描述是必填项' }]"
+            >
               <a-input v-model="addBankForm.bankDesc" />
             </a-form-item>
             <a-form-item label="题库头像">
               <a-input v-model="addBankForm.bankIcon" />
             </a-form-item>
-            <a-form-item field="bankType" label="题库类型" :rules="[{ required: true, message: '题库类型是必填项' }]"
-                         validate-trigger="blur">
+            <a-form-item
+              field="bankType"
+              label="题库类型"
+              :rules="[{ required: true, message: '题库类型是必填项' }]"
+              validate-trigger="blur"
+            >
               <a-select v-model="addBankForm.bankType" placeholder="请选择题库类型" allow-clear>
-                <a-option v-for="(value, key) of BANK_TYPE" :value="Number(key)" :key="key" :label="value"></a-option>
+                <a-option
+                  v-for="(value, key) of BANK_TYPE"
+                  :value="Number(key)"
+                  :key="key"
+                  :label="value"
+                ></a-option>
               </a-select>
             </a-form-item>
-            <a-form-item field="scoringStrategy" label="评分策略"
-                         :rules="[{ required: true, message: '题库评分策略是必填项' }]"
-                         validate-trigger="blur">
-              <a-select v-model="addBankForm.scoringStrategy" placeholder="请选择题库评分策略" allow-clear>
-                <a-option v-for="(value, key) of SCORING_STRATEGY" :value="Number(key)" :key="key"
-                          :label="value"></a-option>
+            <a-form-item
+              field="scoringStrategy"
+              label="评分策略"
+              :rules="[{ required: true, message: '题库评分策略是必填项' }]"
+              validate-trigger="blur"
+            >
+              <a-select
+                v-model="addBankForm.scoringStrategy"
+                placeholder="请选择题库评分策略"
+                allow-clear
+              >
+                <a-option
+                  v-for="(value, key) of SCORING_STRATEGY"
+                  :value="Number(key)"
+                  :key="key"
+                  :label="value"
+                ></a-option>
               </a-select>
             </a-form-item>
           </a-form>
@@ -113,10 +148,14 @@
       </a-drawer>
     </div>
     <div id="editBank">
-      <a-drawer :width="500" :visible="editBankVisible" @ok="editBankOk" @cancel="editBankCancel" unmountOnClose>
-        <template #title>
-          编辑题库
-        </template>
+      <a-drawer
+        :width="500"
+        :visible="editBankVisible"
+        @ok="editBankOk"
+        @cancel="editBankCancel"
+        unmountOnClose
+      >
+        <template #title> 编辑题库 </template>
         <div class="add-user-form">
           <a-form :model="editBankForm" label-width="80">
             <a-form-item label="题库名称">
@@ -128,18 +167,38 @@
             <a-form-item label="题库描述">
               <a-input v-model="editBankForm.bankDesc" />
             </a-form-item>
-            <a-form-item field="bankType" label="题库类型" :rules="[{ required: true, message: '题库类型是必填项' }]"
-                         validate-trigger="blur">
+            <a-form-item
+              field="bankType"
+              label="题库类型"
+              :rules="[{ required: true, message: '题库类型是必填项' }]"
+              validate-trigger="blur"
+            >
               <a-select v-model="editBankForm.bankType" placeholder="请选择题库类型" allow-clear>
-                <a-option v-for="(value, key) of BANK_TYPE" :value="Number(key)" :key="key" :label="value"></a-option>
+                <a-option
+                  v-for="(value, key) of BANK_TYPE"
+                  :value="Number(key)"
+                  :key="key"
+                  :label="value"
+                ></a-option>
               </a-select>
             </a-form-item>
-            <a-form-item field="scoringStrategy" label="评分策略"
-                         :rules="[{ required: true, message: '题库评分策略是必填项' }]"
-                         validate-trigger="blur">
-              <a-select v-model="editBankForm.scoringStrategy" placeholder="请选择题库评分策略" allow-clear>
-                <a-option v-for="(value, key) of SCORING_STRATEGY" :value="Number(key)" :key="key"
-                          :label="value"></a-option>
+            <a-form-item
+              field="scoringStrategy"
+              label="评分策略"
+              :rules="[{ required: true, message: '题库评分策略是必填项' }]"
+              validate-trigger="blur"
+            >
+              <a-select
+                v-model="editBankForm.scoringStrategy"
+                placeholder="请选择题库评分策略"
+                allow-clear
+              >
+                <a-option
+                  v-for="(value, key) of SCORING_STRATEGY"
+                  :value="Number(key)"
+                  :key="key"
+                  :label="value"
+                ></a-option>
               </a-select>
             </a-form-item>
           </a-form>
@@ -187,7 +246,7 @@ const searchParams = ref<API.QuestionBankQueryRequest>({
   pageSize: 10
 })
 
-const data = ref<API.QuestionBank []>([])
+const data = ref<API.QuestionBank[]>([])
 const total = ref<number>(0)
 
 const loadData = async () => {
@@ -233,7 +292,6 @@ const editBankOk = async () => {
   }
 }
 const editBankCancel = () => {
-
   editBankVisible.value = false
 }
 
@@ -242,7 +300,6 @@ let editBankForm = ref<API.QuestionBankEditRequest>({
   bankIcon: '',
   bankName: ''
 })
-
 
 const addBankVisible = ref(false)
 

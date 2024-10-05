@@ -4,12 +4,12 @@
       <template #cover>
         <div
           :style="{
-          height: '204px',
-          overflow: 'hidden',
-        }"
+            height: '204px',
+            overflow: 'hidden'
+          }"
         >
           <img
-            :style="{ width: '100%',transform: 'translateY(-10px)' }"
+            :style="{ width: '100%', transform: 'translateY(-10px)' }"
             :src="bank.bankIcon"
             :alt="bank.bankName"
           />

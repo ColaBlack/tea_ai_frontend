@@ -83,12 +83,6 @@ declare namespace API {
     message?: string
   }
 
-  type BaseResponseString_ = {
-    code?: number
-    data?: string
-    message?: string
-  }
-
   type BaseResponseUserAnswerVO_ = {
     code?: number
     data?: UserAnswerVO
@@ -426,10 +420,6 @@ declare namespace API {
     updateTime?: string
     user?: UserVO
     userId?: number
-  }
-
-  type uploadFileUsingPOSTParams = {
-    biz?: string
   }
 
   type User = {

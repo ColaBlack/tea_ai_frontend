@@ -25,6 +25,7 @@
           >
             查看结果
           </a-button>
+          <a-spin :size="28" v-if="loading" />
           <a-button v-if="current > 1" circle @click="current -= 1">
             上一题
           </a-button>
@@ -111,6 +112,7 @@ const doChange = (value: string) => {
 }
 
 const doSubmit = async () => {
+  loading.value = true
   const res = await addUserAnswerUsingPost({
     bankid: props.bankId,
     choices: answerList.value
@@ -124,7 +126,10 @@ const doSubmit = async () => {
   } else {
     Message.error('提交失败:' + res.data.message)
   }
+  loading.value = false
 }
+
+const loading = ref(false)
 </script>
 
 <style scoped>

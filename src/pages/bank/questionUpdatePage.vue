@@ -78,7 +78,7 @@
                   />
                 </a-form-item>
                 <a-form-item>
-                  <a-spin v-if="loading" size="32" tip="去喝口水再来看看吧" />
+                  <a-spin v-if="loading" :size="32" tip="去喝口水再来看看吧" />
                 </a-form-item>
                 <a-form-item>
                 </a-form-item>

@@ -29,7 +29,7 @@
           </a-space>
         </a-col>
         <a-col flex="320px">
-          <a-image width="100%" :src="data?.resultPicture" />
+          <a-image v-if="data?.resultPicture" width="100%" :src="data?.resultPicture" />
         </a-col>
       </a-row>
     </a-card>

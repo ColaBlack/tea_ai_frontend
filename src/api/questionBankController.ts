@@ -92,21 +92,6 @@ export async function listQuestionBankVoByPageUsingPost(
   })
 }
 
-/** listMyQuestionBankVOByPage POST /api/questionBank/my/list/page/vo */
-export async function listMyQuestionBankVoByPageUsingPost(
-  body: API.QuestionBankQueryRequest,
-  options?: { [key: string]: any }
-) {
-  return request<API.BaseResponsePageQuestionBankVO_>('/api/questionBank/my/list/page/vo', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    data: body,
-    ...(options || {})
-  })
-}
-
 /** questionBankReview POST /api/questionBank/review */
 export async function questionBankReviewUsingPost(
   body: API.ReviewRequest,

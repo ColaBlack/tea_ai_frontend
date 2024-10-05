@@ -32,21 +32,6 @@ export async function deleteUserAnswerUsingPost(
   })
 }
 
-/** editUserAnswer POST /api/userAnswer/edit */
-export async function editUserAnswerUsingPost(
-  body: API.UserAnswerEditRequest,
-  options?: { [key: string]: any }
-) {
-  return request<API.BaseResponseBoolean_>('/api/userAnswer/edit', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    data: body,
-    ...(options || {})
-  })
-}
-
 /** getUserAnswerVOById GET /api/userAnswer/get/vo */
 export async function getUserAnswerVoByIdUsingGet(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
@@ -68,36 +53,6 @@ export async function listUserAnswerByPageUsingPost(
   options?: { [key: string]: any }
 ) {
   return request<API.BaseResponsePageUserAnswer_>('/api/userAnswer/list/page', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    data: body,
-    ...(options || {})
-  })
-}
-
-/** listUserAnswerVOByPage POST /api/userAnswer/list/page/vo */
-export async function listUserAnswerVoByPageUsingPost(
-  body: API.UserAnswerQueryRequest,
-  options?: { [key: string]: any }
-) {
-  return request<API.BaseResponsePageUserAnswerVO_>('/api/userAnswer/list/page/vo', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    data: body,
-    ...(options || {})
-  })
-}
-
-/** listMyUserAnswerVOByPage POST /api/userAnswer/my/list/page/vo */
-export async function listMyUserAnswerVoByPageUsingPost(
-  body: API.UserAnswerQueryRequest,
-  options?: { [key: string]: any }
-) {
-  return request<API.BaseResponsePageUserAnswerVO_>('/api/userAnswer/my/list/page/vo', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

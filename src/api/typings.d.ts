@@ -77,33 +77,9 @@ declare namespace API {
     message?: string
   }
 
-  type BaseResponsePageUserAnswerVO_ = {
-    code?: number
-    data?: PageUserAnswerVO_
-    message?: string
-  }
-
-  type BaseResponsePageUserVO_ = {
-    code?: number
-    data?: PageUserVO_
-    message?: string
-  }
-
   type BaseResponseQuestionBankVO_ = {
     code?: number
     data?: QuestionBankVO
-    message?: string
-  }
-
-  type BaseResponseQuestionVO_ = {
-    code?: number
-    data?: QuestionVO
-    message?: string
-  }
-
-  type BaseResponseScoringResultVO_ = {
-    code?: number
-    data?: ScoringResultVO
     message?: string
   }
 
@@ -113,21 +89,9 @@ declare namespace API {
     message?: string
   }
 
-  type BaseResponseUser_ = {
-    code?: number
-    data?: User
-    message?: string
-  }
-
   type BaseResponseUserAnswerVO_ = {
     code?: number
     data?: UserAnswerVO
-    message?: string
-  }
-
-  type BaseResponseUserVO_ = {
-    code?: number
-    data?: UserVO
     message?: string
   }
 
@@ -140,27 +104,7 @@ declare namespace API {
     id?: number
   }
 
-  type getQuestionVOByIdUsingGETParams = {
-    /** id */
-    id?: number
-  }
-
-  type getScoringResultVOByIdUsingGETParams = {
-    /** id */
-    id?: number
-  }
-
   type getUserAnswerVOByIdUsingGETParams = {
-    /** id */
-    id?: number
-  }
-
-  type getUserByIdUsingGETParams = {
-    /** id */
-    id?: number
-  }
-
-  type getUserVOByIdUsingGETParams = {
     /** id */
     id?: number
   }
@@ -291,32 +235,6 @@ declare namespace API {
     total?: number
   }
 
-  type PageUserAnswerVO_ = {
-    countId?: string
-    current?: number
-    maxLimit?: number
-    optimizeCountSql?: boolean
-    orders?: OrderItem[]
-    pages?: number
-    records?: UserAnswerVO[]
-    searchCount?: boolean
-    size?: number
-    total?: number
-  }
-
-  type PageUserVO_ = {
-    countId?: string
-    current?: number
-    maxLimit?: number
-    optimizeCountSql?: boolean
-    orders?: OrderItem[]
-    pages?: number
-    records?: UserVO[]
-    searchCount?: boolean
-    size?: number
-    total?: number
-  }
-
   type Question = {
     bankid?: number
     createTime?: string
@@ -404,11 +322,6 @@ declare namespace API {
   type QuestionContentDTO = {
     options?: Option[]
     title?: string
-  }
-
-  type QuestionEditRequest = {
-    id?: number
-    questionContent?: QuestionContentDTO[]
   }
 
   type QuestionQueryRequest = {
@@ -562,12 +475,6 @@ declare namespace API {
     id?: number
   }
 
-  type UserAnswerEditRequest = {
-    bankid?: number
-    choices?: string
-    id?: number
-  }
-
   type UserAnswerQueryRequest = {
     bankid?: number
     banktype?: number
@@ -631,12 +538,6 @@ declare namespace API {
     checkPassword?: string
     userAccount?: string
     userPassword?: string
-  }
-
-  type UserUpdateMyRequest = {
-    userAvatar?: string
-    userName?: string
-    userProfile?: string
   }
 
   type UserUpdateRequest = {

@@ -47,21 +47,6 @@ export async function editScoringResultUsingPost(
   })
 }
 
-/** getScoringResultVOById GET /api/scoringResult/get/vo */
-export async function getScoringResultVoByIdUsingGet(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.getScoringResultVOByIdUsingGETParams,
-  options?: { [key: string]: any }
-) {
-  return request<API.BaseResponseScoringResultVO_>('/api/scoringResult/get/vo', {
-    method: 'GET',
-    params: {
-      ...params
-    },
-    ...(options || {})
-  })
-}
-
 /** listScoringResultByPage POST /api/scoringResult/list/page */
 export async function listScoringResultByPageUsingPost(
   body: API.ScoringResultQueryRequest,

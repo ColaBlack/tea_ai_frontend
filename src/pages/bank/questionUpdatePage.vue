@@ -78,9 +78,6 @@
                   />
                 </a-form-item>
                 <a-form-item>
-                  <a-spin v-if="loading" :size="32" tip="去喝口水再来看看吧" />
-                </a-form-item>
-                <a-form-item>
                 </a-form-item>
               </a-form>
             </div>
@@ -100,8 +97,7 @@ import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/user'
 import { addQuestionUsingPost, listQuestionVoByPageUsingPost } from '@/api/questionController'
 import { getQuestionBankVoByIdUsingGet } from '@/api/questionBankController'
-import message from '@arco-design/web-vue/es/message'
-import { generateQuestionUsingPost } from '@/api/aiController'
+import { BASE_URL } from '@/config/request'
 
 interface Props {
   bankId: number
@@ -136,7 +132,7 @@ const loadData = async () => {
     creator.value = bank.data.data?.userId || -1
     if (!canEdit.value) {
       Message.error('你没有权限编辑该题目信息')
-      router.push('/403')
+      await router.push('/403')
     }
   } else if (bank.data.code === 40400) {
     Message.error('获取题库信息失败:' + bank.data.message)
@@ -222,31 +218,32 @@ const handleAIClick = () => {
   visibleAI.value = true
 }
 
-const loading = ref(false)
-
 const handleAIOk = async () => {
   if (!props.bankId) {
     return
   }
 
-  loading.value = true
+  // 发送sse请求
+  const eventSource = new EventSource(BASE_URL + `/api/ai/generate/question/sse?bankId=${props.bankId}&optionNumber=${AIForm.value.optionNumber}&questionNumber=${AIForm.value.questionNumber}`)
 
-  const res = await generateQuestionUsingPost({
-    bankId: props.bankId as number,
-    ...AIForm.value
-  })
+  visibleAI.value = false
+  Message.success('生成中，请稍后')
 
-  if (res.data.code === 200 && res.data.data && res.data.data.length > 0) {
-    form.value.questionContent = [...form.value.questionContent || [], ...res.data.data]
+  // 监听sse消息
+  eventSource.onmessage = (event) => {
+    const res = JSON.parse(event.data)
+    form.value.questionContent = [...form.value.questionContent || [], res]
     questionContent.value = form.value.questionContent
-    message.success('生成成功')
-    visibleAI.value = false
-  } else {
-    message.error('生成失败，' + res.data.message)
   }
-
-  loading.value = false
-
+  eventSource.onerror = (event) => {
+    if (event.eventPhase === EventSource.CLOSED) {
+      eventSource.close()
+      Message.success('生成结束')
+    } else {
+      eventSource.close()
+      Message.error('生成失败，')
+    }
+  }
 }
 
 const handleAICancel = () => {

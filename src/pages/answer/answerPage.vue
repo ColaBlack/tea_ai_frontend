@@ -18,6 +18,7 @@
           </a-button>
           <a-button
             type="primary"
+            :loading="loading"
             v-if="current === questionContent.length"
             circle
             :disabled="!currentAnswer"
@@ -25,7 +26,6 @@
           >
             查看结果
           </a-button>
-          <a-spin :size="28" v-if="loading" />
           <a-button v-if="current > 1" circle @click="current -= 1">
             上一题
           </a-button>

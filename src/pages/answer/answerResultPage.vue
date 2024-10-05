@@ -4,7 +4,7 @@
       <a-row>
         <a-col flex="auto" class="contentWrapper">
           <h2>{{ data.resultName }}</h2>
-          <p>结果描述：{{ data.resultDesc }}</p>
+          <p style="max-width: 1000px">结果描述：{{ data.resultDesc }}</p>
           <p v-if="data.resultScore">结果得分：{{ data.resultScore }}</p>
           <p>我的答案：{{ data.choices }}</p>
           <p>题库类型：{{ BANK_TYPE[data.bankType as 0 | 1] || '未知题库类型' }}</p>
@@ -26,7 +26,7 @@
             <a-button type="secondary" status="danger" @click="router.push('/')">返回首页</a-button>
           </a-space>
         </a-col>
-        <a-col flex="320px">
+        <a-col flex="320px" style="margin-left: 20px">
           <a-image v-if="data?.resultPicture" width="100%" :src="data?.resultPicture" />
         </a-col>
       </a-row>

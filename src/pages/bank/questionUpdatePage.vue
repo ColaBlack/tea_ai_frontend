@@ -78,6 +78,9 @@
                   />
                 </a-form-item>
                 <a-form-item>
+                  <a-spin v-if="loading" size="large" tip="去喝口水再来看看吧" />
+                </a-form-item>
+                <a-form-item>
                 </a-form-item>
               </a-form>
             </div>
@@ -218,23 +221,32 @@ const AIForm = ref<API.AiGenerateQuestionRequest>({
 const handleAIClick = () => {
   visibleAI.value = true
 }
+
+const loading = ref(false)
+
 const handleAIOk = async () => {
   if (!props.bankId) {
     return
   }
+
+  loading.value = true
+
   const res = await generateQuestionUsingPost({
     bankId: props.bankId as number,
     ...AIForm.value
   })
 
   if (res.data.code === 200 && res.data.data && res.data.data.length > 0) {
-    form.value.questionContent = res.data.data
+    form.value.questionContent = [...form.value.questionContent || [], ...res.data.data]
     questionContent.value = form.value.questionContent
     message.success('生成成功')
     visibleAI.value = false
   } else {
     message.error('生成失败，' + res.data.message)
   }
+
+  loading.value = false
+
 }
 
 const handleAICancel = () => {

@@ -77,21 +77,6 @@ export async function listScoringResultVoByPageUsingPost(
   })
 }
 
-/** listMyScoringResultVOByPage POST /api/scoringResult/my/list/page/vo */
-export async function listMyScoringResultVoByPageUsingPost(
-  body: API.ScoringResultQueryRequest,
-  options?: { [key: string]: any }
-) {
-  return request<API.BaseResponsePageScoringResultVO_>('/api/scoringResult/my/list/page/vo', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    data: body,
-    ...(options || {})
-  })
-}
-
 /** updateScoringResult POST /api/scoringResult/update */
 export async function updateScoringResultUsingPost(
   body: API.ScoringResultUpdateRequest,

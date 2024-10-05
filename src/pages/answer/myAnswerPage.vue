@@ -37,8 +37,8 @@
       <template #createTime="{ record }">
         {{ dayjs(record.createTime).format('YYYY-MM-DD HH:mm:ss') }}
       </template>
-      <template #resultProp="{ record }">
-        <a-tag v-for="(tag, index) in record.resultProp" :key="index" style="margin-right: 4px;">{{ tag }}</a-tag>
+      <template #choices="{ record }">
+        <a-tag v-for="(tag, index) in record.choices" :key="index" style="margin-right: 4px;">{{ tag }}</a-tag>
       </template>
       <template #action="{ record }">
         <a-popconfirm content="你确定要删除该用户回答吗？" @ok="handleDelete(record)">
@@ -56,12 +56,11 @@
 
 <script setup lang="ts">
 import { reactive, ref, watchEffect } from 'vue'
-import { deleteUserAnswerUsingPost } from '@/api/userAnswerController'
+import { deleteUserAnswerUsingPost, listMyUserAnswerVoByPageUsingPost } from '@/api/userAnswerController'
 import { Message, Modal } from '@arco-design/web-vue'
 import { dayjs } from '@arco-design/web-vue/es/_utils/date'
 import { IconDelete } from '@arco-design/web-vue/es/icon'
 import { BANK_TYPE, SCORING_STRATEGY } from '@/enums/bankEnums'
-import { listMyScoringResultVoByPageUsingPost } from '@/api/scoringResultController'
 
 const loading = ref(false)
 
@@ -69,22 +68,25 @@ const columns = [
   { title: '名称', dataIndex: 'resultName' },
   { title: '描述', dataIndex: 'resultDesc' },
   { title: '图片', dataIndex: 'resultPicture', slotName: 'resultPicture' },
-  { title: '得分', dataIndex: 'resultScoreRange' },
+  { title: '题库类型', dataIndex: 'bankType', slotName: 'bankType' },
+  { title: '评分策略', dataIndex: 'scoringStrategy', slotName: 'scoringStrategy' },
+  { title: '得分', dataIndex: 'resultScore' },
   { title: '创建时间', dataIndex: 'createTime', slotName: 'createTime' },
-  { title: '选项', dataIndex: 'resultProp', slotName: 'resultProp' },
+  { title: '选项', dataIndex: 'choices', slotName: 'choices' },
   { title: '操作', dataIndex: 'action', slotName: 'action' }
 ]
-const searchParams = ref<API.ScoringResultQueryRequest>({
+
+const searchParams = ref<API.UserAnswerQueryRequest>({
   current: 1,
   pageSize: 10
 })
 
-const data = ref<API.ScoringResultVO[]>([])
+const data = ref<API.UserAnswerVO[]>([])
 const total = ref<number>(0)
 
 const loadData = async () => {
   loading.value = true
-  const res = await listMyScoringResultVoByPageUsingPost(searchParams.value)
+  const res = await listMyUserAnswerVoByPageUsingPost((searchParams.value))
   if (res.data.code === 200) {
     data.value = res.data.data?.records || []
     total.value = res.data.data?.total || 0

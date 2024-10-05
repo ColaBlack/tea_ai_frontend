@@ -77,6 +77,12 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponsePageUserAnswerVO_ = {
+    code?: number
+    data?: PageUserAnswerVO_
+    message?: string
+  }
+
   type BaseResponseQuestionBankVO_ = {
     code?: number
     data?: QuestionBankVO
@@ -101,6 +107,25 @@ declare namespace API {
   type getUserAnswerVOByIdUsingGETParams = {
     /** id */
     id?: number
+  }
+
+  type listMyUserAnswerVOByPageUsingPOSTParams = {
+    bankid?: number
+    banktype?: number
+    choices?: string
+    current?: number
+    id?: number
+    pageSize?: number
+    resultDesc?: string
+    resultId?: number
+    resultName?: string
+    resultPicture?: string
+    resultScore?: number
+    scoringStrategy?: number
+    searchText?: string
+    sortField?: string
+    sortOrder?: string
+    userId?: number
   }
 
   type LoginUserVO = {
@@ -224,6 +249,19 @@ declare namespace API {
     orders?: OrderItem[]
     pages?: number
     records?: UserAnswer[]
+    searchCount?: boolean
+    size?: number
+    total?: number
+  }
+
+  type PageUserAnswerVO_ = {
+    countId?: string
+    current?: number
+    maxLimit?: number
+    optimizeCountSql?: boolean
+    orders?: OrderItem[]
+    pages?: number
+    records?: UserAnswerVO[]
     searchCount?: boolean
     size?: number
     total?: number

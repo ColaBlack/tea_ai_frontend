@@ -100,8 +100,8 @@ import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/user'
 import { addQuestionUsingPost, listQuestionVoByPageUsingPost } from '@/api/questionController'
 import { getQuestionBankVoByIdUsingGet } from '@/api/questionBankController'
-import { generateQuestionUsingPost } from '@/api/aiConttroller'
 import message from '@arco-design/web-vue/es/message'
+import { generateQuestionUsingPost } from '@/api/aiController'
 
 interface Props {
   bankId: number

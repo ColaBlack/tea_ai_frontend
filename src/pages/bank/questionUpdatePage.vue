@@ -45,6 +45,43 @@
           <a-button @click="addQuestion(questionContent.length)" type="primary">底部增加题目
           </a-button>
           <a-button class="submit-btn" type="primary" @click="handleSubmit">提交</a-button>
+          <a-button type="outline" @click="handleAIClick">AI 生成题目</a-button>
+          <a-drawer
+            :width="340"
+            :visible="visibleAI"
+            @ok="handleAIOk"
+            @cancel="handleAICancel"
+            unmountOnClose
+          >
+            <template #title> AI 生成题目</template>
+            <div>
+              <a-form
+                :model="AIForm"
+                label-align="left"
+                auto-label-width
+                @submit="handleAIOk"
+              >
+                <a-form-item field="questionNumber" label="题目数量">
+                  <a-input-number
+                    v-model="AIForm.questionNumber"
+                    :min="0"
+                    :max="20"
+                    placeholder="请输入题目数量"
+                  />
+                </a-form-item>
+                <a-form-item field="optionNumber" label="选项数量">
+                  <a-input-number
+                    v-model="AIForm.optionNumber"
+                    :min="0"
+                    :max="6"
+                    placeholder="请输入选项数量"
+                  />
+                </a-form-item>
+                <a-form-item>
+                </a-form-item>
+              </a-form>
+            </div>
+          </a-drawer>
           <a-button class="cancel-btn" type="outline" @click="router.go(-1)">取消</a-button>
         </a-space>
       </a-form-item>
@@ -60,6 +97,8 @@ import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/user'
 import { addQuestionUsingPost, listQuestionVoByPageUsingPost } from '@/api/questionController'
 import { getQuestionBankVoByIdUsingGet } from '@/api/questionBankController'
+import { generateQuestionUsingPost } from '@/api/aiConttroller'
+import message from '@arco-design/web-vue/es/message'
 
 interface Props {
   bankId: number
@@ -167,6 +206,39 @@ const deleteOption = (question: API.QuestionContentDTO, index: number) => {
     question.options = []
   }
   question.options.splice(index, 1)
+}
+
+const visibleAI = ref(false)
+
+const AIForm = ref<API.AiGenerateQuestionRequest>({
+  optionNumber: 4,
+  questionNumber: 5
+})
+
+const handleAIClick = () => {
+  visibleAI.value = true
+}
+const handleAIOk = async () => {
+  if (!props.bankId) {
+    return
+  }
+  const res = await generateQuestionUsingPost({
+    bankId: props.bankId as number,
+    ...AIForm.value
+  })
+
+  if (res.data.code === 200 && res.data.data && res.data.data.length > 0) {
+    form.value.questionContent = res.data.data
+    questionContent.value = form.value.questionContent
+    message.success('生成成功')
+    visibleAI.value = false
+  } else {
+    message.error('生成失败，' + res.data.message)
+  }
+}
+
+const handleAICancel = () => {
+  visibleAI.value = false
 }
 </script>
 

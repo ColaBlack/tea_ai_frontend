@@ -1,7 +1,19 @@
 declare namespace API {
+  type AiGenerateQuestionRequest = {
+    bankId?: number
+    optionNumber?: number
+    questionNumber?: number
+  }
+
   type BaseResponseBoolean_ = {
     code?: number
     data?: boolean
+    message?: string
+  }
+
+  type BaseResponseListQuestionContentDTO_ = {
+    code?: number
+    data?: QuestionContentDTO[]
     message?: string
   }
 

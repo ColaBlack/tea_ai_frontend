@@ -1,5 +1,6 @@
 <!--suppress VueUnrecognizedSlot -->
 <template>
+  <image-uploader image-type="avatar" :on-success="(res)=>{console.log(res)}"/>
   <div id="userPage">
     <a-input-search
       class="search-input"
@@ -11,7 +12,7 @@
       <template #button-icon>
         <icon-search />
       </template>
-      <template #button-default> 搜索 </template>
+      <template #button-default> 搜索</template>
     </a-input-search>
     <a-button type="primary" @click="addBankClick" style="margin-bottom: 10px; margin-left: 20px">
       <template #icon>
@@ -91,7 +92,7 @@
         @cancel="addBankCancel"
         unmountOnClose
       >
-        <template #title> 新增题库 </template>
+        <template #title> 新增题库</template>
         <div class="add-bank-form">
           <a-form :model="addBankForm" label-width="80">
             <a-form-item
@@ -155,7 +156,7 @@
         @cancel="editBankCancel"
         unmountOnClose
       >
-        <template #title> 编辑题库 </template>
+        <template #title> 编辑题库</template>
         <div class="add-user-form">
           <a-form :model="editBankForm" label-width="80">
             <a-form-item label="题库名称">
@@ -221,6 +222,7 @@ import {
   updateQuestionBankUsingPost
 } from '@/api/questionBankController'
 import { BANK_TYPE, REVIEW_ENUMS, REVIEW_STATUS, SCORING_STRATEGY } from '@/enums/bankEnums'
+import ImageUploader from '@/components/imageUploader.vue'
 
 const loading = ref(true)
 

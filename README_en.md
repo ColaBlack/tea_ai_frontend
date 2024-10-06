@@ -28,6 +28,8 @@ This project is a frontend project based on the Vue ecosystem, which includes fe
 
 2. Use the following command to install project dependencies:
 
+3.Considering the diversity of file upload implementation solutions, this project only provides a component that I personally use to upload to my private image hosting service. If you wish to use it, please replace the upload logic in the code accordingly.
+
 ```bash
 pnpm install
 

@@ -69,6 +69,7 @@ pnpm run dev
 
 1. 您可以使用与之匹配的Spring Boot后端项目[配套后端](https://gitee.com/colablack/teaai-backend)
 2. 请务必修改/src/config/request.ts中的请求地址和/src/config/openapi.config.js中的后端接口文档地址
+3. 考虑到文件上传功能实现方案的多样性，本项目只提供了一个我自用的上传到个人图床的组件，如需使用，请自行替换代码中的上传逻辑
 
 ## 项目演示
 

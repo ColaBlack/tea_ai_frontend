@@ -1,6 +1,5 @@
 <!--suppress VueUnrecognizedSlot -->
 <template>
-  <image-uploader image-type="avatar" :on-success="(res)=>{console.log(res)}"/>
   <div id="userPage">
     <a-input-search
       class="search-input"
@@ -222,7 +221,6 @@ import {
   updateQuestionBankUsingPost
 } from '@/api/questionBankController'
 import { BANK_TYPE, REVIEW_ENUMS, REVIEW_STATUS, SCORING_STRATEGY } from '@/enums/bankEnums'
-import ImageUploader from '@/components/imageUploader.vue'
 
 const loading = ref(true)
 

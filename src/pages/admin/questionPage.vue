@@ -92,6 +92,12 @@
                           <a-form-item :label="`选项值`">
                             <a-input v-model="option.value" placeholder="请输入选项值" />
                           </a-form-item>
+                          <a-form-item :label="`选项得分`">
+                            <a-input-number v-model="option.score" placeholder="请输入选项得分" />
+                          </a-form-item>
+                          <a-form-item :label="`选项结果`">
+                            <a-input v-model="option.result" placeholder="请输入选项结果" />
+                          </a-form-item>
                           <a-space>
                             <a-button @click="addOption(question, optionIndex + 1)" type="primary"
                               >增加选项
@@ -165,6 +171,12 @@
                         </a-form-item>
                         <a-form-item :label="`选项值`">
                           <a-input v-model="option.value" placeholder="请输入选项值" />
+                        </a-form-item>
+                        <a-form-item :label="`选项得分`">
+                          <a-input-number v-model="option.score" placeholder="请输入选项得分" />
+                        </a-form-item>
+                        <a-form-item :label="`选项结果`">
+                          <a-input v-model="option.result" placeholder="请输入选项结果" />
                         </a-form-item>
                         <a-space>
                           <a-button @click="addOption(question, optionIndex + 1)" type="primary"

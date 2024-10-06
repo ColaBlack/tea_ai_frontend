@@ -22,15 +22,21 @@
                   <a-form-item :label="`选项值`">
                     <a-input v-model="option.value" placeholder="请输入选项值" />
                   </a-form-item>
+                  <a-form-item :label="`选项得分`">
+                    <a-input-number v-model="option.score" placeholder="请输入选项得分" />
+                  </a-form-item>
+                  <a-form-item :label="`选项结果`">
+                    <a-input v-model="option.result" placeholder="请输入选项结果" />
+                  </a-form-item>
                   <a-space>
                     <a-button @click="addOption(question, optionIndex + 1)" type="primary"
-                      >增加选项
+                    >增加选项
                     </a-button>
                     <a-button
                       @click="deleteOption(question, optionIndex)"
                       status="danger"
                       :style="{ marginLeft: '10px' }"
-                      >删除选项
+                    >删除选项
                     </a-button>
                   </a-space>
                 </a-space>
@@ -39,11 +45,11 @@
           </a-form-item>
           <a-space>
             <a-button @click="addOption(question, question.options?.length || 0)" type="primary"
-              >底部增加选项
+            >底部增加选项
             </a-button>
-            <a-button @click="addQuestion(index + 1)" type="primary">增加题目 </a-button>
+            <a-button @click="addQuestion(index + 1)" type="primary">增加题目</a-button>
             <a-button @click="deleteQuestion(index)" status="danger" :style="{ marginLeft: '10px' }"
-              >删除题目
+            >删除题目
             </a-button>
           </a-space>
         </div>
@@ -51,7 +57,7 @@
       <a-form-item>
         <a-space :style="{ marginTop: '20px' }">
           <a-button @click="addQuestion(questionContent.length)" type="primary"
-            >底部增加题目
+          >底部增加题目
           </a-button>
           <a-button class="submit-btn" type="primary" @click="handleSubmit">提交</a-button>
           <a-button type="outline" @click="handleAIClick">AI 生成题目</a-button>
@@ -81,7 +87,7 @@
                     placeholder="请输入选项数量"
                   />
                 </a-form-item>
-                <a-form-item> </a-form-item>
+                <a-form-item></a-form-item>
               </a-form>
             </div>
           </a-drawer>
@@ -230,7 +236,7 @@ const handleAIOk = async () => {
   // 发送sse请求
   const eventSource = new EventSource(
     BASE_URL +
-      `/api/ai/generate/question/sse?bankId=${props.bankId}&optionNumber=${AIForm.value.optionNumber}&questionNumber=${AIForm.value.questionNumber}`
+    `/api/ai/generate/question/sse?bankId=${props.bankId}&optionNumber=${AIForm.value.optionNumber}&questionNumber=${AIForm.value.questionNumber}`
   )
 
   visibleAI.value = false

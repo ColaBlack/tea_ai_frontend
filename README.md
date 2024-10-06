@@ -1,5 +1,9 @@
 # teaai-frontend
 
+**Read this in English: [English](README_en.md)**
+
+**想看中文文档请点击这里：[中文](README.md)**
+
 ## 介绍
 
 本项目是一个基于Vue全家桶的前端项目，包括用户登录注册、管理员管理审核、普通用户答题和自主创建题库等功能，并集成了AI能力，允许用户用AI自动生成题目和AI判题。

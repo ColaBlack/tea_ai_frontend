@@ -1,6 +1,5 @@
 <!--suppress VueUnrecognizedSlot -->
 <template>
-  <image-uploader image-type="avatar" :on-success="(res)=>{console.log(res)}"/>
   <div id="userPage">
     <a-input-search
       class="search-input"

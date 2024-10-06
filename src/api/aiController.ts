@@ -2,17 +2,17 @@
 /* eslint-disable */
 import request from '@/config/request'
 
-/** generateQuestion POST /api/ai/generate/question */
-export async function generateQuestionUsingPost(
-  body: API.AiGenerateQuestionRequest,
+/** aiGenerateQuestionSSE GET /api/ai/generate/question/sse */
+export async function aiGenerateQuestionSseUsingGet(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.aiGenerateQuestionSSEUsingGETParams,
   options?: { [key: string]: any }
 ) {
-  return request<API.BaseResponseListQuestionContentDTO_>('/api/ai/generate/question', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
+  return request<API.SseEmitter>('/api/ai/generate/question/sse', {
+    method: 'GET',
+    params: {
+      ...params
     },
-    data: body,
     ...(options || {})
   })
 }

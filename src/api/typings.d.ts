@@ -1,5 +1,5 @@
 declare namespace API {
-  type AiGenerateQuestionRequest = {
+  type aiGenerateQuestionSSEUsingGETParams = {
     bankId?: number
     optionNumber?: number
     questionNumber?: number
@@ -8,12 +8,6 @@ declare namespace API {
   type BaseResponseBoolean_ = {
     code?: number
     data?: boolean
-    message?: string
-  }
-
-  type BaseResponseListQuestionContentDTO_ = {
-    code?: number
-    data?: QuestionContentDTO[]
     message?: string
   }
 
@@ -86,6 +80,12 @@ declare namespace API {
   type BaseResponseQuestionBankVO_ = {
     code?: number
     data?: QuestionBankVO
+    message?: string
+  }
+
+  type BaseResponseString_ = {
+    code?: number
+    data?: string
     message?: string
   }
 
@@ -458,6 +458,22 @@ declare namespace API {
     updateTime?: string
     user?: UserVO
     userId?: number
+  }
+
+  type SseEmitter = {
+    timeout?: number
+  }
+
+  type uploadAvatarUsingPOSTParams = {
+    biz?: string
+  }
+
+  type uploadBankImageUsingPOSTParams = {
+    biz?: string
+  }
+
+  type uploadResultImageUsingPOSTParams = {
+    biz?: string
   }
 
   type User = {
